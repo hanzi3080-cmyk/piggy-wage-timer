@@ -29,14 +29,14 @@
 <div class="card mini"><div class="label">每分钟</div><div class="value">¥<span id="minute">0.3315</span></div></div>
 </div>
 <div class="card mini"><div class="label">🪙 每秒都在回血</div><div class="value">¥<span id="second">0.00553</span> / 秒</div></div>
-<div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card"><div class="calhead"><button class="calbtn" id="prevMonth">‹</button><div class="calmonth" id="calTitle">🗓️ 猪猪赎身日历</div><button class="calbtn" id="nextMonth">›</button></div><div class="week"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div><div class="calendar" id="calendar"></div><div class="calstats"><div class="stat">本月已完成工作日<br><b id="doneWork">0</b> 天</div><div class="stat">本月剩余公司租赁<br><b id="leftWork">0</b> 天</div><div class="stat">距离下一个休息日<br><b id="nextRest">--</b></div><div class="stat">本月已回血估算<br><b>¥<span id="monthEarned">0.00</span></b></div></div><div class="editbox" id="editBox"><div id="editDate">选择日期</div><div class="choices"><button class="choice" data-type="work">🐷 上班</button><button class="choice" data-type="rest">🛌 休息</button><button class="choice" data-type="holiday">🎉 放假</button><button class="choice" data-type="leave">🏖️ 请假</button><button class="choice" data-type="unset">○ 未点亮</button></div><div class="goalhint">点日期即可修改；状态只保存在这台手机里。</div></div></div><div class="card"><div class="label">⚙️ 猪猪工资参数</div><div class="salarygrid"><label>底薪<input id="baseSalary" type="number" inputmode="decimal"></label><label>全勤奖<input id="attendanceBonus" type="number" inputmode="decimal"></label><label>餐补 / 出勤日<input id="mealSubsidy" type="number" inputmode="decimal"></label><label>本月预计出勤天数<input id="salaryDays" type="number" inputmode="numeric"></label></div><div class="salarynote" id="salaryNote"></div><div class="goalhint">以后工资变了直接改数字，网页会自动重算日薪、时薪、分薪和秒薪。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
+<div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card"><div class="calhead"><button class="calbtn" id="prevMonth">‹</button><div class="calmonth" id="calTitle">🗓️ 猪猪赎身日历</div><button class="calbtn" id="nextMonth">›</button></div><div class="week"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div><div class="calendar" id="calendar"></div><div class="calstats"><div class="stat">本月已完成工作日<br><b id="doneWork">0</b> 天</div><div class="stat">本月剩余公司租赁<br><b id="leftWork">0</b> 天</div><div class="stat">距离下一个休息日<br><b id="nextRest">--</b></div><div class="stat">本月累计回血估算<br><b>¥<span id="monthEarned">0.00</span></b></div></div><div class="editbox" id="editBox"><div id="editDate">选择日期</div><div class="choices"><button class="choice" data-type="work">🐷 上班</button><button class="choice" data-type="rest">🛌 休息</button><button class="choice" data-type="holiday">🎉 放假</button><button class="choice" data-type="leave">🏖️ 请假</button><button class="choice" data-type="unset">○ 未点亮</button></div><div class="goalhint">点日期即可修改；状态只保存在这台手机里。</div></div></div><div class="card"><div class="label">⚙️ 猪猪工资参数</div><div class="salarygrid"><label>底薪<input id="baseSalary" type="number" inputmode="decimal"></label><label>全勤奖<input id="attendanceBonus" type="number" inputmode="decimal"></label><label>餐补 / 出勤日<input id="mealSubsidy" type="number" inputmode="decimal"></label><label>本月预计出勤天数<input id="salaryDays" type="number" inputmode="numeric"></label></div><div class="salarynote" id="salaryNote"></div><div class="goalhint">以后工资变了直接改数字，网页会自动重算。日历中的🎉带薪节假日会计入累计回血；餐补只按🐷实际出勤日计算。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
 </div>
 <script>
 let baseSalary=+(localStorage.getItem('pigBaseSalary')||3000), attendanceBonus=+(localStorage.getItem('pigAttendanceBonus')||200), mealSubsidy=+(localStorage.getItem('pigMealSubsidy')||20), days=+(localStorage.getItem('pigSalaryDays')||23);
 const workSeconds=8*3600; let monthly=0,daily=0,perSecond=0;
 function recalcPay(){monthly=baseSalary+attendanceBonus+mealSubsidy*days;daily=days?monthly/days:0;perSecond=daily/workSeconds;
  document.getElementById('monthly').textContent=monthly.toFixed(2);document.getElementById('daily').textContent=daily.toFixed(2);document.getElementById('hourly').textContent=(daily/8).toFixed(2);document.getElementById('minute').textContent=(daily/8/60).toFixed(4);document.getElementById('second').textContent=perSecond.toFixed(5);
- if(document.getElementById('salaryNote'))document.getElementById('salaryNote').textContent='当前估算：¥'+baseSalary.toFixed(0)+' + ¥'+attendanceBonus.toFixed(0)+' + ¥'+mealSubsidy.toFixed(0)+' × '+days+'天 = ¥'+monthly.toFixed(2);
+ if(document.getElementById('salaryNote'))document.getElementById('salaryNote').textContent='当前整月估算：¥'+baseSalary.toFixed(0)+' + ¥'+attendanceBonus.toFixed(0)+' + ¥'+mealSubsidy.toFixed(0)+' × '+days+'个实际出勤日 = ¥'+monthly.toFixed(2);
 }
 const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,'0');
 function secOfDay(d){return d.getHours()*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000}
@@ -82,14 +82,14 @@ function renderCalendar(){
  box.innerHTML='';
  const first=new Date(y,m,1), offset=(first.getDay()+6)%7, count=new Date(y,m+1,0).getDate();
  for(let i=0;i<offset;i++){const e=document.createElement('div');e.className='day empty';box.appendChild(e)}
- let done=0,left=0,earnedDays=0,nextRestDays=null;
+ let done=0,left=0,paidDays=0,actualWorkDays=0,nextRestDays=null;
  for(let d=1;d<=count;d++){
   const date=new Date(y,m,d),key=keyOf(y,m,d),type=savedType(key,date),el=document.createElement('button');
   el.className='day '+type+(key===keyOf(today.getFullYear(),today.getMonth(),today.getDate())?' today':'');
   el.innerHTML=d+'<span class="mark">'+marks[type]+'</span>'; el.onclick=()=>openEdit(key,date,type); box.appendChild(el);
   const isPast=date<new Date(today.getFullYear(),today.getMonth(),today.getDate()+1);
-  if(type==='work'){if(isPast){done++;earnedDays++}else left++}
-  if(type==='holiday'&&isPast) earnedDays++;
+  if(type==='work'){if(isPast){done++;paidDays++;actualWorkDays++}else left++}
+  if(type==='holiday'&&isPast) paidDays++;
  }
  if(y===today.getFullYear()&&m===today.getMonth()){
   let workSteps=0;
@@ -97,7 +97,8 @@ function renderCalendar(){
  }
  document.getElementById('doneWork').textContent=done;document.getElementById('leftWork').textContent=left;
  document.getElementById('nextRest').textContent=nextRestDays===null?'--':(nextRestDays===0?'就是明天 🥹':nextRestDays+' 个工作日');
- document.getElementById('monthEarned').textContent=(earnedDays*daily).toFixed(2);
+ const fixedDaily=days?((baseSalary+attendanceBonus)/days):0;
+ document.getElementById('monthEarned').textContent=(paidDays*fixedDaily+actualWorkDays*mealSubsidy).toFixed(2);
 }
 function openEdit(key,date,type){selectedKey=key;document.getElementById('editBox').classList.add('show');document.getElementById('editDate').textContent=(date.getMonth()+1)+'月'+date.getDate()+'日 · 当前：'+labels[type];document.querySelectorAll('.choice').forEach(b=>b.classList.toggle('active',b.dataset.type===type))}
 document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>{if(!selectedKey)return;if(b.dataset.type==='unset')localStorage.removeItem('pigDay:'+selectedKey);else localStorage.setItem('pigDay:'+selectedKey,b.dataset.type);renderCalendar();document.getElementById('editBox').classList.remove('show')});
