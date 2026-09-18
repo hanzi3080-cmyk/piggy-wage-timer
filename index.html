@@ -13,7 +13,7 @@
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini{padding:16px}.value{font-size:21px;font-weight:750;font-variant-numeric:tabular-nums}
 .bar{height:14px;background:#eee5e0;border-radius:999px;overflow:hidden;margin-top:10px}.fill{height:100%;width:0;background:linear-gradient(90deg,#d9a89b,#b98176);transition:width .5s}
 .status{text-align:center;font-weight:700;margin-top:14px}.foot{text-align:center;font-size:12px;color:#9a8c85;margin-top:20px;line-height:1.7}
-.badge{display:inline-block;background:#f3e6df;padding:7px 11px;border-radius:999px;font-size:13px;margin-top:8px}.hero{background:linear-gradient(145deg,#fff,#fbf3ef)}.quote{font-size:15px;line-height:1.7;font-weight:650}.tiny{font-size:12px;color:#9a8c85;margin-top:8px}
+.badge{display:inline-block;background:#f3e6df;padding:7px 11px;border-radius:999px;font-size:13px;margin-top:8px}.hero{background:linear-gradient(145deg,#fff,#fbf3ef)}.quote{font-size:15px;line-height:1.7;font-weight:650}.tiny{font-size:12px;color:#9a8c85;margin-top:8px}.goalgrid{display:grid;grid-template-columns:1fr 110px;gap:10px;margin-top:10px}.goalgrid input{width:100%;border:1px solid #e4d6cf;background:#fffaf7;border-radius:14px;padding:12px;font-size:16px;color:#382f2b;outline:none}.goalgrid input:focus{border-color:#c9998d}.goalresult{margin-top:12px;font-size:15px;line-height:1.65;font-weight:700}.goalhint{font-size:12px;color:#9a8c85;margin-top:6px}
 </style>
 </head>
 <body><div class="wrap">
@@ -29,7 +29,7 @@
 <div class="card mini"><div class="label">每分钟</div><div class="value">¥<span id="minute">0.3315</span></div></div>
 </div>
 <div class="card mini"><div class="label">🪙 每秒都在回血</div><div class="value">¥<span id="second">0.00553</span> / 秒</div></div>
-<div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
+<div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
 </div>
 <script>
 const monthly=3660, days=23, workSeconds=8*3600, daily=monthly/days, perSecond=daily/workSeconds;
@@ -37,22 +37,32 @@ const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,'0');
 function secOfDay(d){return d.getHours()*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000}
 function tick(){
  const now=new Date(), s=secOfDay(now), start=8.5*3600, lunchStart=12*3600, lunchEnd=13.5*3600, end=18*3600;
- let worked=0, remain=Math.max(0,end-s), msg='';
- if(s<start){msg='公司猪尚未开机 🌚'}
- else if(s<lunchStart){worked=s-start;msg='🐷👔 公司正在租用猪猪 · 金币持续掉落'}
- else if(s<lunchEnd){worked=lunchStart-start;msg='🍚 午休！工资暂停，但下班倒计时不停'}
- else if(s<end){worked=(lunchStart-start)+(s-lunchEnd);msg='🐷👔 下午场 · 距离归还越来越近'}
+ let worked=0, remain=0, msg='';
+ if(s<start){remain=end-start-(lunchEnd-lunchStart);msg='公司猪尚未开机 🌚'}
+ else if(s<lunchStart){worked=s-start;remain=(lunchStart-s)+(end-lunchEnd);msg='🐷👔 公司正在租用猪猪 · 金币持续掉落'}
+ else if(s<lunchEnd){worked=lunchStart-start;remain=end-lunchEnd;msg='🍚 午休！这段时间公司不许偷猪'}
+ else if(s<end){worked=(lunchStart-start)+(s-lunchEnd);remain=end-s;msg='🐷👔 下午场 · 距离归还越来越近'}
  else{worked=workSeconds;remain=0;msg='🎉 公司使用权限到期，猪猪已成功赎回！今晚属于自己。'}
  worked=Math.min(workSeconds,Math.max(0,worked));
  const earned=worked*perSecond, p=worked/workSeconds*100;
  document.getElementById('earned').textContent=earned.toFixed(2);
  document.getElementById('progress').textContent=p.toFixed(1);
  document.getElementById('fill').style.width=p+'%';
- document.getElementById('status').textContent=msg;
+ document.getElementById('status').textContent=msg; updateGoal(earned);
  if(s>=end) document.getElementById('countdown').textContent='00:00:00';
- else if(s<start) document.getElementById('countdown').textContent=pad((end-s)/3600)+':'+pad(((end-s)%3600)/60)+':'+pad((end-s)%60);
+ else if(s<start) document.getElementById('countdown').textContent='08:00:00';
  else {document.getElementById('countdown').textContent=pad(remain/3600)+':'+pad((remain%3600)/60)+':'+pad(remain%60)}
 }
+const goalName=document.getElementById('goalName'),goalPrice=document.getElementById('goalPrice'),goalResult=document.getElementById('goalResult');
+goalName.value=localStorage.getItem('pigGoalName')||''; goalPrice.value=localStorage.getItem('pigGoalPrice')||'';
+function updateGoal(earned){
+ const name=goalName.value.trim(), price=parseFloat(goalPrice.value);
+ if(!name || !Number.isFinite(price) || price<=0){goalResult.textContent='填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚';return}
+ const left=Math.max(0,price-earned);
+ goalResult.textContent=left<=0 ? '🎉 今天赚到的钱已经够买「'+name+'」啦！' : '距离「'+name+'」还差 ¥'+left.toFixed(2)+' 🐷💰';
+}
+function saveGoal(){localStorage.setItem('pigGoalName',goalName.value);localStorage.setItem('pigGoalPrice',goalPrice.value);tick()}
+goalName.addEventListener('input',saveGoal);goalPrice.addEventListener('input',saveGoal);
 document.getElementById('monthly').textContent=monthly.toFixed(2);
 document.getElementById('daily').textContent=daily.toFixed(2);
 document.getElementById('hourly').textContent=(daily/8).toFixed(2);
