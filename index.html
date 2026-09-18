@@ -13,13 +13,13 @@
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini{padding:16px}.value{font-size:21px;font-weight:750;font-variant-numeric:tabular-nums}
 .bar{height:14px;background:#eee5e0;border-radius:999px;overflow:hidden;margin-top:10px}.fill{height:100%;width:0;background:linear-gradient(90deg,#d9a89b,#b98176);transition:width .5s}
 .status{text-align:center;font-weight:700;margin-top:14px}.foot{text-align:center;font-size:12px;color:#9a8c85;margin-top:20px;line-height:1.7}
-.badge{display:inline-block;background:#f3e6df;padding:7px 11px;border-radius:999px;font-size:13px;margin-top:8px}
+.badge{display:inline-block;background:#f3e6df;padding:7px 11px;border-radius:999px;font-size:13px;margin-top:8px}.hero{background:linear-gradient(145deg,#fff,#fbf3ef)}.quote{font-size:15px;line-height:1.7;font-weight:650}.tiny{font-size:12px;color:#9a8c85;margin-top:8px}
 </style>
 </head>
 <body><div class="wrap">
-<div class="top"><div class="pig">🐷💰</div><h2>猪猪实时回血器</h2><div class="sub">公司只是临时租用猪猪 · 18:00 自动归还</div></div>
-<div class="card"><div class="label">⏳ 距离下班还有</div><div class="count" id="countdown">--:--:--</div><div class="status" id="status">正在计算公司租赁进度…</div></div>
-<div class="card"><div class="label">💰 今日已赚</div><div class="money"><small>¥</small><span id="earned">0.00</span></div><div class="bar"><div class="fill" id="fill"></div></div><div class="badge">今日工作进度 <span id="progress">0.0</span>%</div></div>
+<div class="top"><div class="pig">🐷💰</div><h2>猪猪实时回血器</h2><div class="sub">公司只是临时租用猪猪 · 下班后人生自动归还</div></div>
+<div class="card hero"><div class="label">⏳ 距离猪猪赎回还有</div><div class="count" id="countdown">--:--:--</div><div class="status" id="status">正在计算公司租赁进度…</div></div>
+<div class="card"><div class="label">💰 公司今日已支付猪猪</div><div class="money"><small>¥</small><span id="earned">0.00</span></div><div class="bar"><div class="fill" id="fill"></div></div><div class="badge">今日工作进度 <span id="progress">0.0</span>%</div></div>
 <div class="row">
 <div class="card mini"><div class="label">📅 本月预计回血</div><div class="value">¥<span id="monthly">3660.00</span></div></div>
 <div class="card mini"><div class="label">🐷 今日整只售价</div><div class="value">¥<span id="daily">159.13</span></div></div>
@@ -29,7 +29,7 @@
 <div class="card mini"><div class="label">每分钟</div><div class="value">¥<span id="minute">0.3315</span></div></div>
 </div>
 <div class="card mini"><div class="label">🪙 每秒都在回血</div><div class="value">¥<span id="second">0.00553</span> / 秒</div></div>
-<div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
+<div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
 </div>
 <script>
 const monthly=3660, days=23, workSeconds=8*3600, daily=monthly/days, perSecond=daily/workSeconds;
@@ -37,12 +37,12 @@ const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,'0');
 function secOfDay(d){return d.getHours()*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000}
 function tick(){
  const now=new Date(), s=secOfDay(now), start=8.5*3600, lunchStart=12*3600, lunchEnd=13.5*3600, end=18*3600;
- let worked=0, remain=0, msg='';
- if(s<start){remain=end-start;msg='公司猪尚未开机 🌚'}
- else if(s<lunchStart){worked=s-start;remain=(lunchStart-s)+(end-lunchEnd);msg='🐷👔 公司正在租用猪猪'}
- else if(s<lunchEnd){worked=lunchStart-start;remain=end-lunchEnd;msg='🍚 午休！这段时间公司不许偷猪'}
- else if(s<end){worked=(lunchStart-start)+(s-lunchEnd);remain=end-s;msg='🐷👔 公司正在租用猪猪'}
- else{worked=workSeconds;remain=0;msg='🎉 公司使用权限到期，猪猪已成功赎回！'}
+ let worked=0, remain=Math.max(0,end-s), msg='';
+ if(s<start){msg='公司猪尚未开机 🌚'}
+ else if(s<lunchStart){worked=s-start;msg='🐷👔 公司正在租用猪猪 · 金币持续掉落'}
+ else if(s<lunchEnd){worked=lunchStart-start;msg='🍚 午休！工资暂停，但下班倒计时不停'}
+ else if(s<end){worked=(lunchStart-start)+(s-lunchEnd);msg='🐷👔 下午场 · 距离归还越来越近'}
+ else{worked=workSeconds;remain=0;msg='🎉 公司使用权限到期，猪猪已成功赎回！今晚属于自己。'}
  worked=Math.min(workSeconds,Math.max(0,worked));
  const earned=worked*perSecond, p=worked/workSeconds*100;
  document.getElementById('earned').textContent=earned.toFixed(2);
@@ -50,7 +50,7 @@ function tick(){
  document.getElementById('fill').style.width=p+'%';
  document.getElementById('status').textContent=msg;
  if(s>=end) document.getElementById('countdown').textContent='00:00:00';
- else if(s<start) document.getElementById('countdown').textContent='09:30:00';
+ else if(s<start) document.getElementById('countdown').textContent=pad((end-s)/3600)+':'+pad(((end-s)%3600)/60)+':'+pad((end-s)%60);
  else {document.getElementById('countdown').textContent=pad(remain/3600)+':'+pad((remain%3600)/60)+':'+pad(remain%60)}
 }
 document.getElementById('monthly').textContent=monthly.toFixed(2);
