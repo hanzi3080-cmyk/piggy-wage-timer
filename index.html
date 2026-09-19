@@ -42,6 +42,16 @@ const pad=n=>String(Math.max(0,Math.floor(n))).padStart(2,'0');
 function secOfDay(d){return d.getHours()*3600+d.getMinutes()*60+d.getSeconds()+d.getMilliseconds()/1000}
 function tick(){
  const now=new Date(), s=secOfDay(now), start=8.5*3600, lunchStart=12*3600, lunchEnd=13.5*3600, end=18*3600;
+ const todayKey=keyOf(now.getFullYear(),now.getMonth(),now.getDate()), todayType=savedType(todayKey,now);
+ if(todayType!=='work'){
+  const offMsg=todayType==='rest'?'🛌 今天是休息日，公司没有租到猪猪 🌚':todayType==='holiday'?'🎉 今天放假！猪猪自由活动':todayType==='leave'?'🏖️ 今天请假，PigOS暂停公司回血':'○ 今天还没标记上班，PigOS先不回血';
+  document.getElementById('earned').textContent='0.00';
+  document.getElementById('progress').textContent='0.0';
+  document.getElementById('fill').style.width='0%';
+  document.getElementById('status').textContent=offMsg;
+  document.getElementById('countdown').textContent='--:--:--';
+  updateGoal(0); return;
+ }
  let worked=0, remain=0, msg='';
  if(s<start){remain=end-start-(lunchEnd-lunchStart);msg='公司猪尚未开机 🌚'}
  else if(s<lunchStart){worked=s-start;remain=(lunchStart-s)+(end-lunchEnd);msg='🐷👔 公司正在租用猪猪 · 金币持续掉落'}
