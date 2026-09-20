@@ -142,7 +142,7 @@ function updateGoal(earned){
 function saveGoal(){localStorage.setItem('pigGoalName',goalName.value);localStorage.setItem('pigGoalPrice',goalPrice.value);tick()}
 goalName.addEventListener('input',saveGoal);goalPrice.addEventListener('input',saveGoal);
 
-let wishTab='want';
+let wishTab='want',editingWishId=null;
 let wishlist=[];
 try{wishlist=JSON.parse(localStorage.getItem('pigWishlist')||'[]');if(!Array.isArray(wishlist))wishlist=[]}catch(e){wishlist=[]}
 const wishList=document.getElementById('wishList'),wishForm=document.getElementById('wishForm'),wishName=document.getElementById('wishName'),wishPrice=document.getElementById('wishPrice'),wishPriority=document.getElementById('wishPriority'),wishEmoji=document.getElementById('wishEmoji'),wishNote=document.getElementById('wishNote'),wishSearch=document.getElementById('wishSearch'),wishFilter=document.getElementById('wishFilter');
@@ -166,21 +166,29 @@ function renderWishlist(){
  const q=(wishSearch.value||'').trim().toLowerCase(),filter=wishFilter.value||'all';
  const items=wishlist.filter(x=>(wishTab==='owned'?!!x.owned:!x.owned)&&(!q||(x.name||'').toLowerCase().includes(q)||(x.note||'').toLowerCase().includes(q))&&(filter==='all'||x.priority===filter)).sort((a,b)=>(b.addedAt||0)-(a.addedAt||0));
  if(!items.length){wishList.innerHTML='<div class="wishEmpty">'+(wishTab==='want'?'还没有愿望，先把“想买但不急着买”的东西放这里 🐷':'这里还空着。以后每按一次“买到了”，都会留下一个小战利品 🌚')+'</div>';return}
- wishList.innerHTML=items.map(x=>'<div class="wishItem"><div class="wishIcon">'+esc(x.emoji||defaultWishEmoji(x.priority))+'</div><div><div class="wishTitleRow"><div><div class="wishTitle">'+esc(x.name)+'</div><div class="wishPrice">¥'+Number(x.price||0).toFixed(2)+'</div></div></div>'+(x.owned?'<div class="wishWork">✅ 已拥有'+(x.ownedAt?' · '+new Date(x.ownedAt).toLocaleDateString('zh-CN'):'')+'</div>':'<div class="wishWork">'+workNeededText(Number(x.price||0))+'</div>')+'<div class="wishMeta"><span class="wishTag '+esc(x.priority)+'">'+priorityLabel(x.priority)+'</span>'+(x.note?'<span class="wishOwned">'+esc(x.note)+'</span>':'')+'</div><div class="wishActions">'+(x.owned?'<button class="wishAction" data-wish-action="restore" data-id="'+x.id+'">放回想买</button>':'<button class="wishAction" data-wish-action="goal" data-id="'+x.id+'">设为今日目标</button><button class="wishAction" data-wish-action="owned" data-id="'+x.id+'">买到了</button>')+'<button class="wishAction" data-wish-action="delete" data-id="'+x.id+'">删除</button></div></div></div>').join('');
+ wishList.innerHTML=items.map(x=>'<div class="wishItem"><div class="wishIcon">'+esc(x.emoji||defaultWishEmoji(x.priority))+'</div><div><div class="wishTitleRow"><div><div class="wishTitle">'+esc(x.name)+'</div><div class="wishPrice">¥'+Number(x.price||0).toFixed(2)+'</div></div></div>'+(x.owned?'<div class="wishWork">✅ 已拥有'+(x.ownedAt?' · '+new Date(x.ownedAt).toLocaleDateString('zh-CN'):'')+'</div>':'<div class="wishWork">'+workNeededText(Number(x.price||0))+'</div>')+'<div class="wishMeta"><span class="wishTag '+esc(x.priority)+'">'+priorityLabel(x.priority)+'</span>'+(x.note?'<span class="wishOwned">'+esc(x.note)+'</span>':'')+'</div><div class="wishActions">'+(x.owned?'<button class="wishAction" data-wish-action="restore" data-id="'+x.id+'">放回想买</button>':'<button class="wishAction" data-wish-action="goal" data-id="'+x.id+'">设为今日目标</button><button class="wishAction" data-wish-action="owned" data-id="'+x.id+'">买到了</button>')+'<button class="wishAction" data-wish-action="edit" data-id="'+x.id+'">编辑</button><button class="wishAction" data-wish-action="delete" data-id="'+x.id+'">删除</button></div></div></div>').join('');
 }
-function clearWishForm(){wishName.value='';wishPrice.value='';wishPriority.value='normal';wishEmoji.value='';wishNote.value=''}
+function clearWishForm(){editingWishId=null;wishName.value='';wishPrice.value='';wishPriority.value='normal';wishEmoji.value='';wishNote.value='';document.getElementById('saveWish').textContent='存进愿望清单';document.getElementById('cancelWish').textContent='取消'}
+function editWish(x){editingWishId=x.id;wishName.value=x.name||'';wishPrice.value=x.price||'';wishPriority.value=x.priority||'normal';wishEmoji.value=x.emoji||'';wishNote.value=x.note||'';document.getElementById('saveWish').textContent='保存修改';document.getElementById('cancelWish').textContent='取消编辑';wishForm.classList.add('show');wishForm.scrollIntoView({behavior:'smooth',block:'center'})}
 document.getElementById('toggleWishForm').onclick=()=>wishForm.classList.toggle('show');
 document.getElementById('cancelWish').onclick=()=>{wishForm.classList.remove('show');clearWishForm()};
 document.getElementById('saveWish').onclick=()=>{
  const name=wishName.value.trim(),price=parseFloat(wishPrice.value);if(!name||!Number.isFinite(price)||price<=0){alert('先填物品名称和价格哦 🐷');return}
- wishlist.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,price,priority:wishPriority.value||'normal',emoji:wishEmoji.value.trim(),note:wishNote.value.trim(),owned:false,addedAt:Date.now()});
- saveWishlist();clearWishForm();wishForm.classList.remove('show');wishTab='want';renderWishlist();
+ if(editingWishId){
+  const x=wishlist.find(v=>v.id===editingWishId);
+  if(x){x.name=name;x.price=price;x.priority=wishPriority.value||'normal';x.emoji=wishEmoji.value.trim();x.note=wishNote.value.trim();x.updatedAt=Date.now()}
+ }else{
+  wishlist.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,price,priority:wishPriority.value||'normal',emoji:wishEmoji.value.trim(),note:wishNote.value.trim(),owned:false,addedAt:Date.now()});
+  wishTab='want';
+ }
+ saveWishlist();clearWishForm();wishForm.classList.remove('show');renderWishlist();
 };
 document.querySelectorAll('.wishTab').forEach(b=>b.onclick=()=>{wishTab=b.dataset.wishTab;renderWishlist()});
 wishSearch.addEventListener('input',renderWishlist);wishFilter.addEventListener('change',renderWishlist);
 wishList.onclick=e=>{
  const b=e.target.closest('[data-wish-action]');if(!b)return;const i=wishlist.findIndex(x=>x.id===b.dataset.id);if(i<0)return;
  const x=wishlist[i],a=b.dataset.wishAction;
+ if(a==='edit'){editWish(x);return}
  if(a==='goal'){goalName.value=x.name;goalPrice.value=x.price;saveGoal();setPage('home');setTimeout(()=>document.getElementById('goalName').closest('.card').scrollIntoView({behavior:'smooth',block:'center'}),80)}
  if(a==='owned'){x.owned=true;x.ownedAt=Date.now();saveWishlist();renderWishlist()}
  if(a==='restore'){x.owned=false;delete x.ownedAt;saveWishlist();renderWishlist()}
