@@ -48,6 +48,30 @@
 .assetParent{font-size:11px;color:#8b7d76;margin-top:5px}
 .assetOrderBtn{font-weight:800}
 
+
+/* 资产页：总览 / 记账 */
+.assetSubTabs{display:grid;grid-template-columns:1fr 1fr;background:#f1e9e4;border-radius:999px;padding:4px;margin:12px 0 2px}
+.assetSubTab{border:0;background:transparent;border-radius:999px;padding:9px 8px;color:#8b7d76;font-size:14px;font-weight:750}
+.assetSubTab.active{background:#fff;color:#4b3b34;box-shadow:0 2px 8px rgba(80,55,45,.08)}
+.assetPane{display:none}.assetPane.active{display:block}
+.ledgerTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px}
+.ledgerAdd{border:0;background:#191715;color:#f2cf8d;border-radius:13px;padding:9px 12px;font-size:14px;font-weight:800}
+.ledgerMonth{border:1px solid #e4d6cf;background:#fffaf7;border-radius:12px;padding:9px 10px;color:#4c3c35;font-size:13px}
+.ledgerSummary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.ledgerStat{background:#f8efea;border-radius:14px;padding:10px 8px;text-align:center}.ledgerStat span{display:block;font-size:11px;color:#8b7d76;margin-bottom:4px}.ledgerStat b{font-size:15px;font-variant-numeric:tabular-nums}
+.ledgerForm{display:none;margin-top:12px;padding:12px;background:#fbf6f3;border-radius:16px}.ledgerForm.show{display:block}
+.ledgerGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}.ledgerGrid:first-child{margin-top:0}
+.ledgerForm input,.ledgerForm select{width:100%;border:1px solid #e4d6cf;background:#fffaf7;border-radius:12px;padding:11px;font-size:14px;color:#382f2b;outline:none}
+.ledgerFull{margin-top:9px}.ledgerFormBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.ledgerBtn{border:0;border-radius:12px;padding:10px;background:#ead5cc;color:#4c3c35;font-weight:750}.ledgerBtn.secondary{background:#eee7e2}
+.ledgerHint{font-size:11px;color:#9a8c85;line-height:1.55;margin-top:8px}
+.ledgerList{margin-top:12px}.ledgerDate{font-size:12px;font-weight:800;color:#8b7d76;margin:14px 2px 5px}.ledgerDate:first-child{margin-top:4px}
+.ledgerItem{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:start;padding:12px 2px;border-top:1px solid #eee1da}.ledgerDate+.ledgerItem{border-top:0}
+.ledgerIcon{width:42px;height:42px;border-radius:13px;background:#f8efea;display:flex;align-items:center;justify-content:center;font-size:21px}
+.ledgerTitle{font-size:15px;font-weight:800}.ledgerMeta{font-size:11px;color:#9a8c85;margin-top:4px;line-height:1.5}.ledgerAmount{font-size:15px;font-weight:850;text-align:right;font-variant-numeric:tabular-nums}.ledgerAmount.income{color:#55725f}.ledgerAmount.expense{color:#a96454}.ledgerAmount.transfer{color:#75658d}
+.ledgerActions{display:flex;justify-content:flex-end;gap:5px;margin-top:6px}.ledgerAction{border:1px solid #e3d4cd;background:#fff;border-radius:999px;padding:4px 7px;font-size:10px;color:#6c5a52}
+.ledgerEmpty{text-align:center;color:#9a8c85;font-size:13px;padding:24px 0 12px;line-height:1.7}
+
 </style>
 </head>
 <body><div class="wrap">
@@ -63,7 +87,39 @@
 <div class="card mini"><div class="label">每分钟</div><div class="value">¥<span id="minute">0.3315</span></div></div>
 </div>
 <div class="card mini"><div class="label">🪙 每秒都在回血</div><div class="value">¥<span id="second">0.00553</span> / 秒</div></div>
-<div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card" id="wishlistCard"><div class="wishHead"><div><div class="label">🛍️ 猪猪愿望清单</div><div class="tiny">想买的东西，都换算成“还要上几天班” 🌚</div></div><button class="wishAdd" id="toggleWishForm">＋ 添加想买</button></div><div class="wishTabs"><button class="wishTab active" data-wish-tab="want">想买 <span id="wantCount">0</span></button><button class="wishTab" data-wish-tab="owned">已拥有 <span id="ownedCount">0</span></button></div><div class="wishForm" id="wishForm"><div class="wishFormGrid"><input id="wishName" maxlength="30" placeholder="物品名称"><input id="wishPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 价格"></div><div class="wishFormGrid" style="margin-top:9px"><select id="wishPriority"><option value="high">高优先级</option><option value="normal" selected>普通</option><option value="low">低优先级</option></select><input id="wishEmoji" maxlength="4" placeholder="图标 如 🎧"></div><input class="wishNote" id="wishNote" maxlength="60" placeholder="备注（可不填）"><div class="wishFormBtns"><button class="wishFormBtn" id="saveWish">存进愿望清单</button><button class="wishFormBtn secondary" id="cancelWish">取消</button></div></div><div class="wishTools"><input class="wishSearch" id="wishSearch" placeholder="搜索物品"><select class="wishFilter" id="wishFilter"><option value="all">全部优先级</option><option value="high">高</option><option value="normal">普通</option><option value="low">低</option></select></div><div class="wishList" id="wishList"></div></div><div class="card" id="assetCard"><div class="assetHead"><div><div class="label">💳 猪猪资产</div><div class="tiny">按“资金袋 / 账户 / 负债”分组；支持折叠和自定义排序。</div></div><button class="assetAdd" id="toggleAssetForm">＋ 添加</button></div><div class="assetCardVisual"><div class="assetBrand">PIGGY BANK · INFINITE</div><div class="assetPig">👑🐷</div><div class="assetNetLabel">净资产</div><div class="assetNet">¥<span id="assetNet">0.00</span></div><div class="assetCardNo">8888 · 8888 · 8888 · 8888</div><div class="assetMotto">存下热爱 · 去看世界 ∞</div></div><div class="assetSummary"><div class="assetStat"><span>计入资产</span><b>¥<span id="assetTotal">0.00</span></b></div><div class="assetStat"><span>计入负债</span><b>¥<span id="debtTotal">0.00</span></b></div></div><div class="assetForm" id="assetForm"><div class="assetGrid"><input id="assetName" maxlength="24" placeholder="名称，如：支付宝"><input id="assetAmount" type="number" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="assetGrid"><select id="assetGroup"><option value="pocket">💰 资金袋</option><option value="account" selected>🏦 账户</option><option value="debt">🧾 负债</option></select><input id="assetEmoji" maxlength="4" placeholder="图标 如 💳"></div><div class="assetGrid"><select id="assetParent"><option value="">不归属其他账户</option></select><select id="assetCountMode"><option value="yes">计入净资产</option><option value="no">仅展示，不重复计入</option></select></div><div class="goalhint" id="assetFormHint">如果“小荷包”已经包含在支付宝余额里，可选归属支付宝，并设为“仅展示”。</div><div class="assetFormBtns"><button class="assetBtn" id="saveAsset">保存</button><button class="assetBtn secondary" id="cancelAsset">取消</button></div></div><div class="assetList" id="assetList"></div></div><div class="card"><div class="calhead"><button class="calbtn" id="prevMonth">‹</button><div class="calmonth" id="calTitle">🗓️ 猪猪赎身日历</div><button class="calbtn" id="nextMonth">›</button></div><div class="week"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div><div class="calendar" id="calendar"></div><div class="calstats"><div class="stat">本月已完成工作日<br><b id="doneWork">0</b> 天</div><div class="stat">本月剩余公司租赁<br><b id="leftWork">0</b> 天</div><div class="stat">距离下一个休息日<br><b id="nextRest">--</b></div><div class="stat">本月累计回血估算<br><b>¥<span id="monthEarned">0.00</span></b></div></div><div class="salarynote" id="attendanceStatus">🎁 全勤奖候选：¥200</div><div class="editbox" id="editBox"><div id="editDate">选择日期</div><div class="choices"><button class="choice" data-type="work">🐷 上班</button><button class="choice" data-type="rest">🛌 休息</button><button class="choice" data-type="holiday">🎉 放假</button><button class="choice" data-type="leave">🏖️ 请假</button><button class="choice" data-type="unset">○ 未点亮</button></div><div class="goalhint">点日期即可修改；状态只保存在这台手机里。</div></div></div><div class="card"><div class="label">⚙️ 猪猪工资参数</div><div class="salarygrid"><label>底薪<input id="baseSalary" type="number" inputmode="decimal"></label><label>全勤奖<input id="attendanceBonus" type="number" inputmode="decimal"></label><label>餐补 / 出勤日<input id="mealSubsidy" type="number" inputmode="decimal"></label><label>本月预计出勤天数<input id="salaryDays" type="number" inputmode="numeric"></label></div><div class="salarynote" id="salaryNote"></div><div class="goalhint">以后工资变了直接改数字，网页会自动重算。日历中的🎉带薪节假日会计入累计回血；餐补只按🐷实际出勤日计算。</div></div><div class="card"><div class="label">🧰 猪猪数据保险箱</div><div class="vaultBtns"><button class="vaultBtn" id="exportData">📦 导出备份</button><button class="vaultBtn" id="importData">📥 导入恢复</button></div><input id="importFile" type="file" accept="application/json,.json" style="display:none"><div class="vaultStatus" id="vaultStatus">日历、工资参数、回血目标、愿望和资产数据都会自动保存在当前入口；建议偶尔导出一份备份。Safari → 桌面版迁移时，也可以用这里搬家。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
+<div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card" id="wishlistCard"><div class="wishHead"><div><div class="label">🛍️ 猪猪愿望清单</div><div class="tiny">想买的东西，都换算成“还要上几天班” 🌚</div></div><button class="wishAdd" id="toggleWishForm">＋ 添加想买</button></div><div class="wishTabs"><button class="wishTab active" data-wish-tab="want">想买 <span id="wantCount">0</span></button><button class="wishTab" data-wish-tab="owned">已拥有 <span id="ownedCount">0</span></button></div><div class="wishForm" id="wishForm"><div class="wishFormGrid"><input id="wishName" maxlength="30" placeholder="物品名称"><input id="wishPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 价格"></div><div class="wishFormGrid" style="margin-top:9px"><select id="wishPriority"><option value="high">高优先级</option><option value="normal" selected>普通</option><option value="low">低优先级</option></select><input id="wishEmoji" maxlength="4" placeholder="图标 如 🎧"></div><input class="wishNote" id="wishNote" maxlength="60" placeholder="备注（可不填）"><div class="wishFormBtns"><button class="wishFormBtn" id="saveWish">存进愿望清单</button><button class="wishFormBtn secondary" id="cancelWish">取消</button></div></div><div class="wishTools"><input class="wishSearch" id="wishSearch" placeholder="搜索物品"><select class="wishFilter" id="wishFilter"><option value="all">全部优先级</option><option value="high">高</option><option value="normal">普通</option><option value="low">低</option></select></div><div class="wishList" id="wishList"></div></div><div class="card" id="assetCard">
+<div class="assetHead"><div><div class="label">💳 猪猪资产</div><div class="tiny">黑金无限卡 · 钱的用途和去向都看得见 🌚</div></div></div>
+<div class="assetSubTabs"><button class="assetSubTab active" data-asset-tab="overview">资产总览</button><button class="assetSubTab" data-asset-tab="ledger">记账</button></div>
+
+<div class="assetPane active" data-asset-pane="overview">
+<div class="assetHead" style="margin-top:12px"><div class="tiny">按“资金袋 / 账户 / 负债”分组；支持折叠和自定义排序。</div><button class="assetAdd" id="toggleAssetForm">＋ 添加</button></div>
+<div class="assetCardVisual"><div class="assetBrand">PIGGY BANK · INFINITE</div><div class="assetPig">👑🐷</div><div class="assetNetLabel">净资产</div><div class="assetNet">¥<span id="assetNet">0.00</span></div><div class="assetCardNo">8888 · 8888 · 8888 · 8888</div><div class="assetMotto">存下热爱 · 去看世界 ∞</div></div>
+<div class="assetSummary"><div class="assetStat"><span>计入资产</span><b>¥<span id="assetTotal">0.00</span></b></div><div class="assetStat"><span>计入负债</span><b>¥<span id="debtTotal">0.00</span></b></div></div>
+<div class="assetForm" id="assetForm">
+<div class="assetGrid"><input id="assetName" maxlength="24" placeholder="名称，如：支付宝"><input id="assetAmount" type="number" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div>
+<div class="assetGrid"><select id="assetGroup"><option value="pocket">💰 资金袋</option><option value="account" selected>🏦 账户</option><option value="debt">🧾 负债</option></select><input id="assetEmoji" maxlength="4" placeholder="图标 如 💳"></div>
+<div class="assetGrid"><select id="assetParent"><option value="">不归属其他账户</option></select><select id="assetCountMode"><option value="yes">计入净资产</option><option value="no">仅展示，不重复计入</option></select></div>
+<div class="goalhint" id="assetFormHint">如果“小荷包”已经包含在支付宝余额里，可选归属支付宝，并设为“仅展示”。</div>
+<div class="assetFormBtns"><button class="assetBtn" id="saveAsset">保存</button><button class="assetBtn secondary" id="cancelAsset">取消</button></div>
+</div>
+<div class="assetList" id="assetList"></div>
+</div>
+
+<div class="assetPane" data-asset-pane="ledger">
+<div class="ledgerTop"><input class="ledgerMonth" id="ledgerMonth" type="month"><button class="ledgerAdd" id="toggleLedgerForm">＋ 记一笔</button></div>
+<div class="ledgerSummary"><div class="ledgerStat"><span>本月收入</span><b>¥<span id="ledgerIncome">0.00</span></b></div><div class="ledgerStat"><span>本月支出</span><b>¥<span id="ledgerExpense">0.00</span></b></div><div class="ledgerStat"><span>本月结余</span><b>¥<span id="ledgerBalance">0.00</span></b></div></div>
+<div class="ledgerForm" id="ledgerForm">
+<div class="ledgerGrid"><select id="ledgerType"><option value="expense">支出</option><option value="income">收入</option><option value="transfer">转账</option></select><input id="ledgerAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div>
+<div class="ledgerGrid"><input id="ledgerCategory" list="ledgerCategoryPresets" maxlength="20" placeholder="分类，如：餐饮"><input id="ledgerDate" type="date"></div>
+<datalist id="ledgerCategoryPresets"><option value="餐饮"><option value="购物"><option value="交通"><option value="自习"><option value="娱乐"><option value="工资"><option value="家庭补贴"><option value="退款"><option value="其他"></datalist>
+<div class="ledgerGrid"><select id="ledgerFrom"></select><select id="ledgerTo"></select></div>
+<input class="ledgerFull" id="ledgerNote" maxlength="60" placeholder="备注（可不填）">
+<div class="ledgerHint" id="ledgerHint">支出会自动扣对应账户余额；如果用花呗付款，则会增加花呗负债。</div>
+<div class="ledgerFormBtns"><button class="ledgerBtn" id="saveLedger">保存这笔</button><button class="ledgerBtn secondary" id="cancelLedger">取消</button></div>
+</div>
+<div class="ledgerList" id="ledgerList"></div>
+</div>
+</div><div class="card"><div class="calhead"><button class="calbtn" id="prevMonth">‹</button><div class="calmonth" id="calTitle">🗓️ 猪猪赎身日历</div><button class="calbtn" id="nextMonth">›</button></div><div class="week"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div><div class="calendar" id="calendar"></div><div class="calstats"><div class="stat">本月已完成工作日<br><b id="doneWork">0</b> 天</div><div class="stat">本月剩余公司租赁<br><b id="leftWork">0</b> 天</div><div class="stat">距离下一个休息日<br><b id="nextRest">--</b></div><div class="stat">本月累计回血估算<br><b>¥<span id="monthEarned">0.00</span></b></div></div><div class="salarynote" id="attendanceStatus">🎁 全勤奖候选：¥200</div><div class="editbox" id="editBox"><div id="editDate">选择日期</div><div class="choices"><button class="choice" data-type="work">🐷 上班</button><button class="choice" data-type="rest">🛌 休息</button><button class="choice" data-type="holiday">🎉 放假</button><button class="choice" data-type="leave">🏖️ 请假</button><button class="choice" data-type="unset">○ 未点亮</button></div><div class="goalhint">点日期即可修改；状态只保存在这台手机里。</div></div></div><div class="card"><div class="label">⚙️ 猪猪工资参数</div><div class="salarygrid"><label>底薪<input id="baseSalary" type="number" inputmode="decimal"></label><label>全勤奖<input id="attendanceBonus" type="number" inputmode="decimal"></label><label>餐补 / 出勤日<input id="mealSubsidy" type="number" inputmode="decimal"></label><label>本月预计出勤天数<input id="salaryDays" type="number" inputmode="numeric"></label></div><div class="salarynote" id="salaryNote"></div><div class="goalhint">以后工资变了直接改数字，网页会自动重算。日历中的🎉带薪节假日会计入累计回血；餐补只按🐷实际出勤日计算。</div></div><div class="card"><div class="label">🧰 猪猪数据保险箱</div><div class="vaultBtns"><button class="vaultBtn" id="exportData">📦 导出备份</button><button class="vaultBtn" id="importData">📥 导入恢复</button></div><input id="importFile" type="file" accept="application/json,.json" style="display:none"><div class="vaultStatus" id="vaultStatus">日历、工资参数、回血目标、愿望和资产数据都会自动保存在当前入口；建议偶尔导出一份备份。Safari → 桌面版迁移时，也可以用这里搬家。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
 </div>
 <script>
 
@@ -253,7 +309,7 @@ function renderAssets(){
  document.getElementById('assetTotal').textContent=total.toFixed(2);
  document.getElementById('debtTotal').textContent=debt.toFixed(2);
  document.getElementById('assetNet').textContent=(total-debt).toFixed(2);
- if(!assets.length){assetList.innerHTML='<div class="assetEmpty">黑卡已经发了，但账本还是空的 🌚<br>可以先把支付宝、微信、银行卡和几个小荷包加进来。</div>';return}
+ if(!assets.length){assetList.innerHTML='<div class="assetEmpty">黑卡已经发了，但账本还是空的 🌚<br>可以先把支付宝、微信、银行卡和几个小荷包加进来。</div>';refreshLedgerAccountOptions();return}
  assetList.innerHTML=assetGroupOrder.map((g,gi)=>{
   const meta=assetGroupMeta[g],items=assets.filter(x=>x.group===g),collapsed=!!assetCollapsed[g];
   const body=items.length?items.map((x,ii)=>{
@@ -262,6 +318,7 @@ function renderAssets(){
   }).join(''):'<div class="assetEmpty">这一组还是空的。</div>';
   return '<section class="assetGroup '+(collapsed?'collapsed':'')+'" data-group="'+g+'"><div class="assetGroupHead"><button class="assetCollapse" data-group-action="toggle" data-group="'+g+'">'+(collapsed?'›':'⌄')+'</button><div><div class="assetGroupTitle">'+meta.icon+' '+meta.name+'</div><div class="assetGroupTotal">展示合计 ¥'+groupDisplayTotal(g).toFixed(2)+' · '+items.length+' 项</div></div><div class="assetGroupControls"><button class="assetGroupBtn" data-group-action="up" data-group="'+g+'" '+(gi===0?'disabled':'')+'>↑</button><button class="assetGroupBtn" data-group-action="down" data-group="'+g+'" '+(gi===assetGroupOrder.length-1?'disabled':'')+'>↓</button></div></div><div class="assetGroupBody">'+body+'</div></section>';
  }).join('');
+ refreshLedgerAccountOptions();
 }
 function editAsset(x){editingAssetId=x.id;assetName.value=x.name||'';assetAmount.value=x.amount||'';assetGroup.value=x.group||'account';assetEmoji.value=x.emoji||'';assetCountMode.value=x.countInNet===false?'no':'yes';accountOptions(x.parentId||'');syncAssetForm();document.getElementById('saveAsset').textContent='保存修改';document.getElementById('cancelAsset').textContent='取消编辑';assetForm.classList.add('show');assetForm.scrollIntoView({behavior:'smooth',block:'center'})}
 function moveAsset(id,dir){
@@ -290,9 +347,120 @@ assetList.onclick=e=>{
  const x=assets[i],a=b.dataset.assetAction;
  if(a==='edit'){editAsset(x);return}
  if(a==='up'||a==='down'){moveAsset(x.id,a);return}
- if(a==='delete'&&confirm('从资产页删除「'+x.name+'」吗？')){assets.splice(i,1);assets.forEach(v=>{if(v.parentId===x.id){v.parentId='';}});saveAssets();renderAssets()}
+ if(a==='delete'){
+  if(ledger.some(t=>t.fromId===x.id||t.toId===x.id)){alert('这个账户已经有记账流水啦 🌚\n先把相关流水删除或改到别的账户，再删账户。');return}
+  if(confirm('从资产页删除「'+x.name+'」吗？')){assets.splice(i,1);assets.forEach(v=>{if(v.parentId===x.id){v.parentId='';}});saveAssets();renderAssets()}
+ }
 };
-renderAssets();
+
+/* ---------- 记账 v1 ---------- */
+let ledger=[],editingLedgerId=null;
+try{ledger=JSON.parse(localStorage.getItem('pigLedger')||'[]');if(!Array.isArray(ledger))ledger=[]}catch(e){ledger=[]}
+const ledgerForm=document.getElementById('ledgerForm'),ledgerList=document.getElementById('ledgerList'),ledgerType=document.getElementById('ledgerType'),ledgerAmount=document.getElementById('ledgerAmount'),ledgerCategory=document.getElementById('ledgerCategory'),ledgerDate=document.getElementById('ledgerDate'),ledgerFrom=document.getElementById('ledgerFrom'),ledgerTo=document.getElementById('ledgerTo'),ledgerNote=document.getElementById('ledgerNote'),ledgerMonth=document.getElementById('ledgerMonth');
+function localDateStr(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function monthStr(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+ledgerMonth.value=localStorage.getItem('pigLedgerMonth')||monthStr();
+ledgerDate.value=localDateStr();
+function saveLedger(){localStorage.setItem('pigLedger',JSON.stringify(ledger))}
+function ledgerEligibleAssets(){return assets.filter(x=>x.group==='account'||x.group==='debt'||(x.group==='pocket'&&x.countInNet!==false))}
+function optionHtml(list,placeholder){return '<option value="">'+placeholder+'</option>'+list.map(x=>'<option value="'+x.id+'">'+esc((x.emoji||'')+' '+x.name+(x.group==='debt'?'（负债）':''))+'</option>').join('')}
+function refreshLedgerAccountOptions(){
+ if(!ledgerFrom||!ledgerTo)return;
+ const fromOld=ledgerFrom.value,toOld=ledgerTo.value,list=ledgerEligibleAssets();
+ ledgerFrom.innerHTML=optionHtml(list,'选择账户');
+ ledgerTo.innerHTML=optionHtml(list.filter(x=>x.group!=='debt'),'选择入账账户');
+ if(list.some(x=>x.id===fromOld))ledgerFrom.value=fromOld;
+ if(list.some(x=>x.id===toOld))ledgerTo.value=toOld;
+ syncLedgerForm();
+}
+function syncLedgerForm(){
+ if(!ledgerFrom||!ledgerTo)return;
+ const t=ledgerType.value,list=ledgerEligibleAssets(),regular=list.filter(x=>x.group!=='debt');
+ if(t==='expense'){
+  ledgerFrom.disabled=false;ledgerTo.disabled=true;ledgerTo.value='';
+  ledgerFrom.innerHTML=optionHtml(list,'从哪个账户支付');
+  document.getElementById('ledgerHint').textContent='支出：普通账户会扣余额；如果选择花呗等负债账户，则会增加负债。';
+ }else if(t==='income'){
+  ledgerFrom.disabled=true;ledgerFrom.value='';ledgerTo.disabled=false;
+  ledgerTo.innerHTML=optionHtml(regular,'收入到哪个账户');
+  document.getElementById('ledgerHint').textContent='收入会自动增加对应账户余额。分类可以直接自己输入。';
+ }else{
+  ledgerFrom.disabled=false;ledgerTo.disabled=false;
+  ledgerFrom.innerHTML=optionHtml(list,'从哪里转出');
+  ledgerTo.innerHTML=optionHtml(list,'转到哪里');
+  document.getElementById('ledgerHint').textContent='转账不计入收入或支出。普通账户→负债可当作还花呗；负债→普通账户可表示借款到账。';
+ }
+}
+function assetDelta(id,delta){const x=assets.find(a=>a.id===id);if(x)x.amount=Number(x.amount||0)+delta}
+function effectsFor(type,amount,fromId,toId){
+ const from=assets.find(x=>x.id===fromId),to=assets.find(x=>x.id===toId),fx=[];
+ if(type==='expense'){
+  if(!from)throw new Error('请选择支付账户');
+  fx.push({id:from.id,delta:from.group==='debt'?amount:-amount});
+ }else if(type==='income'){
+  if(!to)throw new Error('请选择入账账户');
+  if(to.group==='debt')throw new Error('收入不能直接记到负债账户');
+  fx.push({id:to.id,delta:amount});
+ }else{
+  if(!from||!to)throw new Error('请选择转出和转入账户');
+  if(from.id===to.id)throw new Error('转出和转入不能是同一个账户');
+  if(from.group==='debt'&&to.group==='debt')throw new Error('暂不支持负债账户之间直接转账');
+  fx.push({id:from.id,delta:from.group==='debt'?amount:-amount});
+  fx.push({id:to.id,delta:to.group==='debt'?-amount:amount});
+ }
+ return fx;
+}
+function applyEffects(fx,mult=1){(fx||[]).forEach(e=>assetDelta(e.id,Number(e.delta||0)*mult))}
+function clearLedgerForm(){
+ editingLedgerId=null;ledgerType.value='expense';ledgerAmount.value='';ledgerCategory.value='';ledgerDate.value=localDateStr();ledgerFrom.value='';ledgerTo.value='';ledgerNote.value='';document.getElementById('saveLedger').textContent='保存这笔';document.getElementById('cancelLedger').textContent='取消';syncLedgerForm();
+}
+function transactionAccountText(t){
+ const f=assets.find(x=>x.id===t.fromId),to=assets.find(x=>x.id===t.toId),fn=f?f.name:'已删除账户',tn=to?to.name:'已删除账户';
+ return t.type==='expense'?fn:t.type==='income'?tn:(fn+' → '+tn);
+}
+function ledgerIcon(t){if(t.type==='income')return'💰';if(t.type==='transfer')return'🔄';const map={'餐饮':'🍜','购物':'🛍️','交通':'🚇','自习':'📚','娱乐':'🎮'};return map[t.category]||'💸'}
+function renderLedger(){
+ const m=ledgerMonth.value||monthStr();localStorage.setItem('pigLedgerMonth',m);
+ const items=ledger.filter(t=>(t.date||'').slice(0,7)===m).sort((a,b)=>(b.date||'').localeCompare(a.date||'')+(b.createdAt||0)-(a.createdAt||0));
+ const income=items.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount||0),0),expense=items.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount||0),0);
+ document.getElementById('ledgerIncome').textContent=income.toFixed(2);document.getElementById('ledgerExpense').textContent=expense.toFixed(2);document.getElementById('ledgerBalance').textContent=(income-expense).toFixed(2);
+ if(!items.length){ledgerList.innerHTML='<div class="ledgerEmpty">这个月还没有流水。<br>第一笔可以从“午饭 / 自习室 / 工资到账”开始 🌚</div>';return}
+ let last='';
+ ledgerList.innerHTML=items.map(t=>{
+  let head='';if(t.date!==last){last=t.date;head='<div class="ledgerDate">'+esc(t.date)+'</div>'}
+  const cls=t.type==='income'?'income':t.type==='expense'?'expense':'transfer',sign=t.type==='income'?'+':t.type==='expense'?'-':'⇄';
+  return head+'<div class="ledgerItem"><div class="ledgerIcon">'+ledgerIcon(t)+'</div><div><div class="ledgerTitle">'+esc(t.category||({income:'收入',expense:'支出',transfer:'转账'}[t.type]))+'</div><div class="ledgerMeta">'+esc(transactionAccountText(t))+(t.note?' · '+esc(t.note):'')+'</div></div><div><div class="ledgerAmount '+cls+'">'+sign+'¥'+Number(t.amount||0).toFixed(2)+'</div><div class="ledgerActions"><button class="ledgerAction" data-ledger-action="edit" data-id="'+t.id+'">编辑</button><button class="ledgerAction" data-ledger-action="delete" data-id="'+t.id+'">删除</button></div></div></div>';
+ }).join('');
+}
+function editLedger(t){
+ editingLedgerId=t.id;ledgerType.value=t.type;syncLedgerForm();ledgerAmount.value=t.amount;ledgerCategory.value=t.category||'';ledgerDate.value=t.date||localDateStr();ledgerNote.value=t.note||'';ledgerFrom.value=t.fromId||'';ledgerTo.value=t.toId||'';document.getElementById('saveLedger').textContent='保存修改';document.getElementById('cancelLedger').textContent='取消编辑';ledgerForm.classList.add('show');ledgerForm.scrollIntoView({behavior:'smooth',block:'center'});
+}
+document.querySelectorAll('.assetSubTab').forEach(b=>b.onclick=()=>{
+ const tab=b.dataset.assetTab;document.querySelectorAll('.assetSubTab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.assetPane').forEach(p=>p.classList.toggle('active',p.dataset.assetPane===tab));localStorage.setItem('pigAssetSubtab',tab);if(tab==='ledger'){refreshLedgerAccountOptions();renderLedger()}
+});
+const savedAssetTab=localStorage.getItem('pigAssetSubtab');if(savedAssetTab==='ledger')document.querySelector('.assetSubTab[data-asset-tab="ledger"]').click();
+ledgerType.addEventListener('change',syncLedgerForm);ledgerMonth.addEventListener('change',renderLedger);
+document.getElementById('toggleLedgerForm').onclick=()=>{if(ledgerForm.classList.contains('show')){ledgerForm.classList.remove('show');clearLedgerForm()}else{refreshLedgerAccountOptions();clearLedgerForm();ledgerForm.classList.add('show')}};
+document.getElementById('cancelLedger').onclick=()=>{ledgerForm.classList.remove('show');clearLedgerForm()};
+document.getElementById('saveLedger').onclick=()=>{
+ const type=ledgerType.value,amount=parseFloat(ledgerAmount.value),category=ledgerCategory.value.trim(),date=ledgerDate.value||localDateStr(),fromId=ledgerFrom.value,toId=ledgerTo.value,note=ledgerNote.value.trim();
+ if(!Number.isFinite(amount)||amount<=0){alert('金额要大于 0 哦 🐷');return}
+ let newFx;try{newFx=effectsFor(type,amount,fromId,toId)}catch(err){alert(err.message);return}
+ if(editingLedgerId){
+  const old=ledger.find(t=>t.id===editingLedgerId);if(!old)return;
+  applyEffects(old.effects,-1);applyEffects(newFx,1);
+  Object.assign(old,{type,amount,category,date,fromId,toId,note,effects:newFx,updatedAt:Date.now()});
+ }else{
+  applyEffects(newFx,1);ledger.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),type,amount,category,date,fromId,toId,note,effects:newFx,createdAt:Date.now()});
+ }
+ saveAssets();saveLedger();clearLedgerForm();ledgerForm.classList.remove('show');renderAssets();renderLedger();
+};
+ledgerList.onclick=e=>{
+ const b=e.target.closest('[data-ledger-action]');if(!b)return;const i=ledger.findIndex(t=>t.id===b.dataset.id);if(i<0)return;const t=ledger[i],a=b.dataset.ledgerAction;
+ if(a==='edit'){editLedger(t);return}
+ if(a==='delete'&&confirm('删除这笔流水并恢复对应账户余额吗？')){applyEffects(t.effects,-1);ledger.splice(i,1);saveAssets();saveLedger();renderAssets();renderLedger()}
+};
+renderAssets();refreshLedgerAccountOptions();renderLedger();
 
 let viewDate=new Date(), selectedKey='';
 const marks={work:'🐷',rest:'🛌',holiday:'🎉',leave:'🏖️',unset:'○'};
