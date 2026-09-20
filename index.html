@@ -421,7 +421,7 @@ function transactionAccountText(t){
 function ledgerIcon(t){if(t.type==='income')return'💰';if(t.type==='transfer')return'🔄';const map={'餐饮':'🍜','购物':'🛍️','交通':'🚇','自习':'📚','娱乐':'🎮'};return map[t.category]||'💸'}
 function renderLedger(){
  const m=ledgerMonth.value||monthStr();localStorage.setItem('pigLedgerMonth',m);
- const items=ledger.filter(t=>(t.date||'').slice(0,7)===m).sort((a,b)=>(b.date||'').localeCompare(a.date||'')+(b.createdAt||0)-(a.createdAt||0));
+ const items=ledger.filter(t=>(t.date||'').slice(0,7)===m).sort((a,b)=>{const d=(b.date||'').localeCompare(a.date||'');return d||((b.createdAt||0)-(a.createdAt||0))});
  const income=items.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount||0),0),expense=items.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount||0),0);
  document.getElementById('ledgerIncome').textContent=income.toFixed(2);document.getElementById('ledgerExpense').textContent=expense.toFixed(2);document.getElementById('ledgerBalance').textContent=(income-expense).toFixed(2);
  if(!items.length){ledgerList.innerHTML='<div class="ledgerEmpty">这个月还没有流水。<br>第一笔可以从“午饭 / 自习室 / 工资到账”开始 🌚</div>';return}
