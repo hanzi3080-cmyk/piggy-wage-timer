@@ -17,6 +17,15 @@
 
 .wishHead{display:flex;align-items:center;justify-content:space-between;gap:12px}.wishAdd{border:0;background:#f3e6df;border-radius:13px;padding:9px 12px;color:#4c3c35;font-size:14px;font-weight:750}.wishTabs{display:grid;grid-template-columns:1fr 1fr;background:#f1e9e4;border-radius:999px;padding:4px;margin-top:12px}.wishTab{border:0;background:transparent;border-radius:999px;padding:9px 8px;color:#8b7d76;font-size:14px;font-weight:700}.wishTab.active{background:#fff;color:#4b3b34;box-shadow:0 2px 8px rgba(80,55,45,.08)}.wishForm{display:none;margin-top:12px;padding:12px;background:#fbf6f3;border-radius:16px}.wishForm.show{display:block}.wishFormGrid{display:grid;grid-template-columns:1fr 110px;gap:9px}.wishForm input,.wishForm select,.wishSearch,.wishFilter{width:100%;border:1px solid #e4d6cf;background:#fffaf7;border-radius:12px;padding:11px;font-size:14px;color:#382f2b;outline:none}.wishNote{margin-top:9px}.wishFormBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.wishFormBtn{border:0;border-radius:12px;padding:10px;background:#ead5cc;color:#4c3c35;font-weight:750}.wishFormBtn.secondary{background:#eee7e2}.wishTools{display:grid;grid-template-columns:1fr 112px;gap:8px;margin-top:12px}.wishList{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x proximity;margin-top:10px;padding:2px 2px 8px;scrollbar-width:none}.wishList::-webkit-scrollbar{display:none}.wishItem{flex:0 0 82%;display:grid;grid-template-columns:44px 1fr;gap:10px;padding:13px;border:1px solid #eee1da;background:#fffaf7;border-radius:16px;scroll-snap-align:start;box-shadow:0 3px 10px rgba(80,55,45,.04)}.wishItem:first-child{border-top:1px solid #eee1da}.wishIcon{width:44px;height:44px;border-radius:14px;background:#f8efea;display:flex;align-items:center;justify-content:center;font-size:24px}.wishTitleRow{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.wishTitle{font-size:16px;font-weight:800;line-height:1.35}.wishPrice{font-size:16px;font-weight:800;margin-top:2px}.wishWork{font-size:13px;color:#9a765e;margin-top:3px}.wishMeta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:7px}.wishTag{display:inline-block;border-radius:999px;padding:4px 8px;font-size:11px}.wishTag.high{background:#fff0ec;color:#a96454}.wishTag.normal{background:#edf4f8;color:#55778d}.wishTag.low{background:#f2eef9;color:#75658d}.wishOwned{font-size:12px;color:#8b7d76}.wishActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.wishAction{border:1px solid #e3d4cd;background:#fff;border-radius:999px;padding:5px 8px;font-size:11px;color:#5b4941}.wishEmpty{text-align:center;color:#9a8c85;font-size:13px;padding:22px 0 10px;line-height:1.7}
 
+
+/* PigOS 分区导航 */
+.wrap{padding-bottom:108px}
+.appPage{display:none}.appPage.active{display:block}
+.pageHead{padding:10px 4px 2px;margin-bottom:4px}.pageTitle{font-size:26px;font-weight:850;letter-spacing:.2px}.pageSub{font-size:13px;color:#9a8c85;margin-top:5px;line-height:1.55}
+.bottomNav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);z-index:50;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(250,247,244,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e7ddd7;box-shadow:0 -8px 24px rgba(80,55,45,.06)}
+.navBtn{border:0;background:transparent;border-radius:15px;padding:7px 3px 6px;color:#9a8c85;font-size:11px;font-weight:700}.navIcon{display:block;font-size:21px;line-height:1.1;margin-bottom:3px}.navBtn.active{background:#f1e3dc;color:#4c3c35}
+.wishList{display:block;overflow:visible;scroll-snap-type:none;margin-top:10px;padding:0}.wishList::-webkit-scrollbar{display:none}.wishItem{display:grid;grid-template-columns:44px 1fr;width:auto;margin-top:8px;gap:10px;padding:13px;border:1px solid #eee1da;background:#fffaf7;border-radius:16px;box-shadow:0 3px 10px rgba(80,55,45,.04)}.wishItem:first-child{margin-top:0;border-top:1px solid #eee1da}
+
 </style>
 </head>
 <body><div class="wrap">
@@ -35,6 +44,56 @@
 <div class="card"><div class="label">🎯 今日回血目标</div><div class="goalgrid"><input id="goalName" placeholder="想买什么？" maxlength="24"><input id="goalPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 金额"></div><div class="goalresult" id="goalResult">填一个想买的东西和金额，看看今天的猪猪赚到哪了 🌚</div><div class="goalhint">会自动记在这台手机里，下次打开还在。</div></div><div class="card" id="wishlistCard"><div class="wishHead"><div><div class="label">🛍️ 猪猪愿望清单</div><div class="tiny">想买的东西，都换算成“还要上几天班” 🌚</div></div><button class="wishAdd" id="toggleWishForm">＋ 添加想买</button></div><div class="wishTabs"><button class="wishTab active" data-wish-tab="want">想买 <span id="wantCount">0</span></button><button class="wishTab" data-wish-tab="owned">已拥有 <span id="ownedCount">0</span></button></div><div class="wishForm" id="wishForm"><div class="wishFormGrid"><input id="wishName" maxlength="30" placeholder="物品名称"><input id="wishPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="¥ 价格"></div><div class="wishFormGrid" style="margin-top:9px"><select id="wishPriority"><option value="high">高优先级</option><option value="normal" selected>普通</option><option value="low">低优先级</option></select><input id="wishEmoji" maxlength="4" placeholder="图标 如 🎧"></div><input class="wishNote" id="wishNote" maxlength="60" placeholder="备注（可不填）"><div class="wishFormBtns"><button class="wishFormBtn" id="saveWish">存进愿望清单</button><button class="wishFormBtn secondary" id="cancelWish">取消</button></div></div><div class="wishTools"><input class="wishSearch" id="wishSearch" placeholder="搜索物品"><select class="wishFilter" id="wishFilter"><option value="all">全部优先级</option><option value="high">高</option><option value="normal">普通</option><option value="low">低</option></select></div><div class="wishList" id="wishList"></div></div><div class="card"><div class="calhead"><button class="calbtn" id="prevMonth">‹</button><div class="calmonth" id="calTitle">🗓️ 猪猪赎身日历</div><button class="calbtn" id="nextMonth">›</button></div><div class="week"><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div><div>日</div></div><div class="calendar" id="calendar"></div><div class="calstats"><div class="stat">本月已完成工作日<br><b id="doneWork">0</b> 天</div><div class="stat">本月剩余公司租赁<br><b id="leftWork">0</b> 天</div><div class="stat">距离下一个休息日<br><b id="nextRest">--</b></div><div class="stat">本月累计回血估算<br><b>¥<span id="monthEarned">0.00</span></b></div></div><div class="salarynote" id="attendanceStatus">🎁 全勤奖候选：¥200</div><div class="editbox" id="editBox"><div id="editDate">选择日期</div><div class="choices"><button class="choice" data-type="work">🐷 上班</button><button class="choice" data-type="rest">🛌 休息</button><button class="choice" data-type="holiday">🎉 放假</button><button class="choice" data-type="leave">🏖️ 请假</button><button class="choice" data-type="unset">○ 未点亮</button></div><div class="goalhint">点日期即可修改；状态只保存在这台手机里。</div></div></div><div class="card"><div class="label">⚙️ 猪猪工资参数</div><div class="salarygrid"><label>底薪<input id="baseSalary" type="number" inputmode="decimal"></label><label>全勤奖<input id="attendanceBonus" type="number" inputmode="decimal"></label><label>餐补 / 出勤日<input id="mealSubsidy" type="number" inputmode="decimal"></label><label>本月预计出勤天数<input id="salaryDays" type="number" inputmode="numeric"></label></div><div class="salarynote" id="salaryNote"></div><div class="goalhint">以后工资变了直接改数字，网页会自动重算。日历中的🎉带薪节假日会计入累计回血；餐补只按🐷实际出勤日计算。</div></div><div class="card"><div class="label">🧰 猪猪数据保险箱</div><div class="vaultBtns"><button class="vaultBtn" id="exportData">📦 导出备份</button><button class="vaultBtn" id="importData">📥 导入恢复</button></div><input id="importFile" type="file" accept="application/json,.json" style="display:none"><div class="vaultStatus" id="vaultStatus">日历、工资参数和回血目标都会自动保存在当前入口；建议偶尔导出一份备份。Safari → 桌面版迁移时，也可以用这里搬家。</div></div><div class="card mini"><div class="label">👓 老g今日播报</div><div class="quote" id="quote">公司可以买走今天的工时，买不走猪猪的人生。🌚</div></div><div class="foot">按：底薪 ¥3000 + 全勤 ¥200 + 23 个出勤日 × ¥20 餐补估算<br>工作 08:30–18:00，午休 12:00–13:30 不计工作时长<br>实际工资以工资条为准 🌚</div>
 </div>
 <script>
+
+function setupAppPages(){
+ const wrap=document.querySelector('.wrap');
+ const els={
+  top:document.querySelector('.top'),
+  hero:document.getElementById('countdown').closest('.card'),
+  earned:document.getElementById('earned').closest('.card'),
+  monthRow:document.getElementById('monthly').closest('.row'),
+  rateRow:document.getElementById('hourly').closest('.row'),
+  second:document.getElementById('second').closest('.card'),
+  goal:document.getElementById('goalName').closest('.card'),
+  wish:document.getElementById('wishlistCard'),
+  calendar:document.getElementById('calendar').closest('.card'),
+  salary:document.getElementById('baseSalary').closest('.card'),
+  vault:document.getElementById('exportData').closest('.card'),
+  quote:document.getElementById('quote').closest('.card'),
+  foot:document.querySelector('.foot')
+ };
+ const make=(name,title,sub)=>{
+  const s=document.createElement('section');s.className='appPage';s.dataset.page=name;
+  if(title){const h=document.createElement('div');h.className='pageHead';h.innerHTML='<div class="pageTitle">'+title+'</div><div class="pageSub">'+sub+'</div>';s.appendChild(h)}
+  return s;
+ };
+ const pages={
+  home:make('home','',''),
+  wish:make('wish','猪猪愿望清单','想买的先放这里，看看要卖多少天猪再决定 🌚'),
+  calendar:make('calendar','猪猪赎身日历','公司什么时候租到猪、什么时候放猪，一眼看清。'),
+  settings:make('settings','PigOS 设置','工资参数、数据备份和一些后台杂物都收进这里。')
+ };
+ [els.top,els.hero,els.earned,els.monthRow,els.rateRow,els.second,els.goal,els.quote].forEach(x=>x&&pages.home.appendChild(x));
+ if(els.wish)pages.wish.appendChild(els.wish);
+ if(els.calendar)pages.calendar.appendChild(els.calendar);
+ [els.salary,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));
+ Object.values(pages).forEach(p=>wrap.appendChild(p));
+
+ const nav=document.createElement('nav');nav.className='bottomNav';nav.setAttribute('aria-label','PigOS 功能导航');
+ nav.innerHTML='<button class="navBtn" data-page-go="home"><span class="navIcon">🐷</span>回血</button><button class="navBtn" data-page-go="wish"><span class="navIcon">🛍️</span>愿望</button><button class="navBtn" data-page-go="calendar"><span class="navIcon">🗓️</span>日历</button><button class="navBtn" data-page-go="settings"><span class="navIcon">⚙️</span>设置</button>';
+ document.body.appendChild(nav);
+ nav.querySelectorAll('.navBtn').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.pageGo)));
+ const saved=localStorage.getItem('pigActivePage');
+ setPage(['home','wish','calendar','settings'].includes(saved)?saved:'home',false);
+}
+function setPage(name,scroll=true){
+ document.querySelectorAll('.appPage').forEach(p=>p.classList.toggle('active',p.dataset.page===name));
+ document.querySelectorAll('.navBtn').forEach(b=>b.classList.toggle('active',b.dataset.pageGo===name));
+ localStorage.setItem('pigActivePage',name);
+ if(scroll)window.scrollTo({top:0,behavior:'smooth'});
+}
+setupAppPages();
+
 let baseSalary=+(localStorage.getItem('pigBaseSalary')||3000), attendanceBonus=+(localStorage.getItem('pigAttendanceBonus')||200), mealSubsidy=+(localStorage.getItem('pigMealSubsidy')||20), days=+(localStorage.getItem('pigSalaryDays')||23);
 const workSeconds=8*3600; let monthly=0,daily=0,perSecond=0;
 function recalcPay(){monthly=baseSalary+attendanceBonus+mealSubsidy*days;daily=days?monthly/days:0;perSecond=daily/workSeconds;
@@ -122,7 +181,7 @@ wishSearch.addEventListener('input',renderWishlist);wishFilter.addEventListener(
 wishList.onclick=e=>{
  const b=e.target.closest('[data-wish-action]');if(!b)return;const i=wishlist.findIndex(x=>x.id===b.dataset.id);if(i<0)return;
  const x=wishlist[i],a=b.dataset.wishAction;
- if(a==='goal'){goalName.value=x.name;goalPrice.value=x.price;saveGoal();document.getElementById('wishlistCard').scrollIntoView({behavior:'smooth',block:'start'})}
+ if(a==='goal'){goalName.value=x.name;goalPrice.value=x.price;saveGoal();setPage('home');setTimeout(()=>document.getElementById('goalName').closest('.card').scrollIntoView({behavior:'smooth',block:'center'}),80)}
  if(a==='owned'){x.owned=true;x.ownedAt=Date.now();saveWishlist();renderWishlist()}
  if(a==='restore'){x.owned=false;delete x.ownedAt;saveWishlist();renderWishlist()}
  if(a==='delete'){if(confirm('从愿望清单删除「'+x.name+'」吗？')){wishlist.splice(i,1);saveWishlist();renderWishlist()}}
