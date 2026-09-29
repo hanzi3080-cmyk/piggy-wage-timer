@@ -22,7 +22,7 @@
 .wrap{padding-bottom:108px}
 .appPage{display:none}.appPage.active{display:block}
 .pageHead{padding:10px 4px 2px;margin-bottom:4px}.pageTitle{font-size:26px;font-weight:850;letter-spacing:.2px}.pageSub{font-size:13px;color:#9a8c85;margin-top:5px;line-height:1.55}
-.bottomNav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);z-index:50;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(250,247,244,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e7ddd7;box-shadow:0 -8px 24px rgba(80,55,45,.06)}
+.bottomNav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);z-index:50;display:grid;grid-template-columns:repeat(6,1fr);gap:2px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(250,247,244,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid #e7ddd7;box-shadow:0 -8px 24px rgba(80,55,45,.06)}
 .navBtn{border:0;background:transparent;border-radius:15px;padding:7px 3px 6px;color:#9a8c85;font-size:11px;font-weight:700}.navIcon{display:block;font-size:21px;line-height:1.1;margin-bottom:3px}.navBtn.active{background:#f1e3dc;color:#4c3c35}
 .wishList{display:block;overflow:visible;scroll-snap-type:none;margin-top:10px;padding:0}.wishList::-webkit-scrollbar{display:none}.wishItem{display:grid;grid-template-columns:44px 1fr;width:auto;margin-top:8px;gap:10px;padding:13px;border:1px solid #eee1da;background:#fffaf7;border-radius:16px;box-shadow:0 3px 10px rgba(80,55,45,.04)}.wishItem:first-child{margin-top:0;border-top:1px solid #eee1da}
 
@@ -71,6 +71,25 @@
 .ledgerTitle{font-size:15px;font-weight:800}.ledgerMeta{font-size:11px;color:#9a8c85;margin-top:4px;line-height:1.5}.ledgerAmount{font-size:15px;font-weight:850;text-align:right;font-variant-numeric:tabular-nums}.ledgerAmount.income{color:#55725f}.ledgerAmount.expense{color:#a96454}.ledgerAmount.transfer{color:#75658d}
 .ledgerActions{display:flex;justify-content:flex-end;gap:5px;margin-top:6px}.ledgerAction{border:1px solid #e3d4cd;background:#fff;border-radius:999px;padding:4px 7px;font-size:10px;color:#6c5a52}
 .ledgerEmpty{text-align:center;color:#9a8c85;font-size:13px;padding:24px 0 12px;line-height:1.7}
+
+
+/* PigOS 倒数日 */
+.countdownHero{background:linear-gradient(145deg,#fffaf7,#f7ece7);position:relative;overflow:hidden}
+.countdownHero:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;right:-52px;top:-58px;background:radial-gradient(circle,rgba(217,168,155,.22),rgba(217,168,155,0) 70%)}
+.countdownHeroTop{display:flex;align-items:center;justify-content:space-between;gap:10px;position:relative;z-index:1}
+.countdownBig{font-size:46px;font-weight:900;line-height:1;margin:12px 0 5px;font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.countdownBig small{font-size:16px;font-weight:750;margin-left:5px;color:#8b7d76}
+.countdownName{font-size:18px;font-weight:850;position:relative;z-index:1}.countdownDate{font-size:12px;color:#9a8c85;margin-top:5px;position:relative;z-index:1}
+.countdownType{display:inline-block;border-radius:999px;padding:5px 9px;font-size:11px;font-weight:800}.countdownType.joy{background:#fff0df;color:#9a6c37}.countdownType.goal{background:#edf1f7;color:#60708b}
+.countdownAdd{border:0;background:#f3e6df;border-radius:13px;padding:9px 12px;color:#4c3c35;font-size:14px;font-weight:750}
+.countdownForm{display:none;margin-top:12px;padding:12px;background:#fbf6f3;border-radius:16px}.countdownForm.show{display:block}
+.countdownGrid{display:grid;grid-template-columns:1fr 120px;gap:9px}.countdownGrid+.countdownGrid{margin-top:9px}
+.countdownForm input,.countdownForm select{width:100%;border:1px solid #e4d6cf;background:#fffaf7;border-radius:12px;padding:11px;font-size:14px;color:#382f2b;outline:none}
+.countdownFormBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.countdownBtn{border:0;border-radius:12px;padding:10px;background:#ead5cc;color:#4c3c35;font-weight:750}.countdownBtn.secondary{background:#eee7e2}
+.countdownList{margin-top:10px}.countdownItem{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:13px 2px;border-top:1px solid #eee1da}.countdownItem:first-child{border-top:0}
+.countdownIcon{width:44px;height:44px;border-radius:14px;background:#f8efea;display:flex;align-items:center;justify-content:center;font-size:23px}.countdownItemName{font-size:15px;font-weight:850}.countdownItemMeta{font-size:11px;color:#9a8c85;margin-top:4px}.countdownDays{text-align:right;font-size:18px;font-weight:900;font-variant-numeric:tabular-nums}.countdownDays small{display:block;font-size:10px;font-weight:650;color:#9a8c85;margin-top:3px}
+.countdownActions{display:flex;gap:5px;margin-top:6px}.countdownAction{border:1px solid #e3d4cd;background:#fff;border-radius:999px;padding:4px 7px;font-size:10px;color:#6c5a52}
+.countdownTimeline{height:7px;background:#eee5e0;border-radius:999px;margin:15px 2px 5px;position:relative}.countdownDot{position:absolute;top:50%;width:13px;height:13px;border-radius:50%;background:#c9998d;transform:translate(-50%,-50%);border:2px solid #fff;box-shadow:0 0 0 1px #d7b5aa}
 
 </style>
 </head>
@@ -123,6 +142,66 @@
 </div>
 <script>
 
+
+/* ---------- 猪猪倒数日 v1 ---------- */
+let pigCountdowns=[];
+try{pigCountdowns=JSON.parse(localStorage.getItem('pigCountdowns')||'[]');if(!Array.isArray(pigCountdowns))pigCountdowns=[]}catch(e){pigCountdowns=[]}
+if(!pigCountdowns.length){
+ pigCountdowns=[
+  {id:'miku2026',name:'初音未来 · 未来有你',date:'2026-10-31',type:'joy',emoji:'🎤',createdAt:Date.now()},
+  {id:'exam2026',name:'考研初试',date:'2026-12-19',type:'goal',emoji:'📝',createdAt:Date.now()+1}
+ ];
+ localStorage.setItem('pigCountdowns',JSON.stringify(pigCountdowns));
+}
+let editingCountdownId=null;
+function saveCountdowns(){localStorage.setItem('pigCountdowns',JSON.stringify(pigCountdowns))}
+function countdownDiff(dateStr){
+ const a=new Date(),today=new Date(a.getFullYear(),a.getMonth(),a.getDate()),parts=dateStr.split('-').map(Number),target=new Date(parts[0],parts[1]-1,parts[2]);
+ return Math.round((target-today)/86400000);
+}
+function buildCountdownPage(page){
+ const box=document.createElement('div');
+ box.innerHTML='<div class="card countdownHero" id="countdownHero"><div class="countdownHeroTop"><div class="label" style="margin:0">✨ 下一件值得期待的事</div><span class="countdownType joy" id="countdownHeroType">期待日</span></div><div class="countdownBig" id="countdownHeroDays">--<small>天</small></div><div class="countdownName" id="countdownHeroName">未来正在加载…</div><div class="countdownDate" id="countdownHeroDate"></div><div class="tiny" id="countdownHeroLine">公司今天拿走一些时间，但猪猪自己的未来也靠近了一天。</div></div>'+
+ '<div class="card"><div class="wishHead"><div><div class="label">🗓️ 我的未来节点</div><div class="tiny">期待日负责开心，目标日负责施工；不许西装猪拿倒数日催债 🌚</div></div><button class="countdownAdd" id="toggleCountdownForm">＋ 添加</button></div>'+
+ '<div class="countdownForm" id="countdownForm"><div class="countdownGrid"><input id="countdownName" maxlength="30" placeholder="事件名称"><input id="countdownDate" type="date"></div><div class="countdownGrid"><select id="countdownType"><option value="joy">✨ 期待日</option><option value="goal">🎯 目标日</option></select><input id="countdownEmoji" maxlength="4" placeholder="图标 如 ✈️"></div><div class="countdownFormBtns"><button class="countdownBtn" id="saveCountdown">保存倒数日</button><button class="countdownBtn secondary" id="cancelCountdown">取消</button></div></div>'+
+ '<div class="countdownTimeline" id="countdownTimeline"></div><div class="countdownList" id="countdownList"></div></div>';
+ page.appendChild(box);
+ document.getElementById('toggleCountdownForm').onclick=()=>{const f=document.getElementById('countdownForm');if(f.classList.contains('show')){f.classList.remove('show');clearCountdownForm()}else f.classList.add('show')};
+ document.getElementById('cancelCountdown').onclick=()=>{document.getElementById('countdownForm').classList.remove('show');clearCountdownForm()};
+ document.getElementById('saveCountdown').onclick=()=>{
+  const name=document.getElementById('countdownName').value.trim(),date=document.getElementById('countdownDate').value,type=document.getElementById('countdownType').value,emoji=document.getElementById('countdownEmoji').value.trim();
+  if(!name||!date){alert('先把事件名称和日期填好哦 🐷');return}
+  if(editingCountdownId){const x=pigCountdowns.find(v=>v.id===editingCountdownId);if(x)Object.assign(x,{name,date,type,emoji,updatedAt:Date.now()})}
+  else pigCountdowns.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),name,date,type,emoji,createdAt:Date.now()});
+  saveCountdowns();clearCountdownForm();document.getElementById('countdownForm').classList.remove('show');renderCountdowns();
+ };
+ document.getElementById('countdownList').onclick=e=>{
+  const b=e.target.closest('[data-countdown-action]');if(!b)return;const x=pigCountdowns.find(v=>v.id===b.dataset.id);if(!x)return;
+  if(b.dataset.countdownAction==='edit'){editingCountdownId=x.id;document.getElementById('countdownName').value=x.name;document.getElementById('countdownDate').value=x.date;document.getElementById('countdownType').value=x.type;document.getElementById('countdownEmoji').value=x.emoji||'';document.getElementById('saveCountdown').textContent='保存修改';document.getElementById('countdownForm').classList.add('show');return}
+  if(b.dataset.countdownAction==='delete'&&confirm('删除「'+x.name+'」这个倒数日吗？')){pigCountdowns=pigCountdowns.filter(v=>v.id!==x.id);saveCountdowns();renderCountdowns()}
+ };
+ renderCountdowns();
+}
+function clearCountdownForm(){editingCountdownId=null;['countdownName','countdownDate','countdownEmoji'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});const t=document.getElementById('countdownType');if(t)t.value='joy';const b=document.getElementById('saveCountdown');if(b)b.textContent='保存倒数日'}
+function countdownDefaultEmoji(x){return x.emoji||(x.type==='goal'?'🎯':'✨')}
+function renderCountdowns(){
+ const list=document.getElementById('countdownList');if(!list)return;
+ const items=[...pigCountdowns].sort((a,b)=>a.date.localeCompare(b.date)),future=items.filter(x=>countdownDiff(x.date)>=0),next=future[0]||items[items.length-1];
+ const hero=document.getElementById('countdownHero');
+ if(next){
+  const d=countdownDiff(next.date),past=d<0;
+  document.getElementById('countdownHeroDays').innerHTML=(past?'✓':d)+'<small>'+(past?' 已抵达':'天')+'</small>';
+  document.getElementById('countdownHeroName').textContent=countdownDefaultEmoji(next)+' '+next.name;
+  document.getElementById('countdownHeroDate').textContent=next.date+(past?' · 已经成为猪生经历 🎉':'');
+  const tag=document.getElementById('countdownHeroType');tag.textContent=next.type==='goal'?'目标日':'期待日';tag.className='countdownType '+(next.type==='goal'?'goal':'joy');
+  document.getElementById('countdownHeroLine').textContent=next.type==='goal'?'今天不用解决所有剩余天数，只施工今天这一块。':'公司今天拿走一些时间，但猪猪自己的未来也靠近了一天。';
+ }else{document.getElementById('countdownHeroDays').innerHTML='∞<small>未来</small>';document.getElementById('countdownHeroName').textContent='还没有倒数日';document.getElementById('countdownHeroDate').textContent='添加一个值得期待的日子吧'}
+ if(!items.length){list.innerHTML='<div class="wishEmpty">未来时间线还是空的。<br>加一个旅行、演唱会、生日或目标日吧 🌚</div>';document.getElementById('countdownTimeline').innerHTML='';return}
+ list.innerHTML=items.map(x=>{const d=countdownDiff(x.date),past=d<0,label=past?'已抵达':d===0?'就是今天':('还有 '+d+' 天');return '<div class="countdownItem"><div class="countdownIcon">'+countdownDefaultEmoji(x)+'</div><div><div class="countdownItemName">'+esc(x.name)+'</div><div class="countdownItemMeta">'+esc(x.date)+' · '+(x.type==='goal'?'目标日':'期待日')+'</div><div class="countdownActions"><button class="countdownAction" data-countdown-action="edit" data-id="'+x.id+'">编辑</button><button class="countdownAction" data-countdown-action="delete" data-id="'+x.id+'">删除</button></div></div><div class="countdownDays">'+(past?'✓':d)+'<small>'+label+'</small></div></div>'}).join('');
+ const fut=future.slice(0,6),max=fut.length?Math.max(1,...fut.map(x=>countdownDiff(x.date))):1;
+ document.getElementById('countdownTimeline').innerHTML=fut.map(x=>'<span class="countdownDot" title="'+esc(x.name)+'" style="left:'+Math.max(2,Math.min(98,countdownDiff(x.date)/max*96+2))+'%"></span>').join('');
+}
+
 function setupAppPages(){
  const wrap=document.querySelector('.wrap');
  const els={
@@ -151,21 +230,23 @@ function setupAppPages(){
   wish:make('wish','猪猪愿望清单','想买的先放这里，看看要卖多少天猪再决定 🌚'),
   assets:make('assets','猪猪资产','这张黑卡不负责刷卡，负责提醒：钱是拿来换自由度的 🌚'),
   calendar:make('calendar','猪猪赎身日历','公司什么时候租到猪、什么时候放猪，一眼看清。'),
+  countdays:make('countdays','猪猪倒数日','不是在等未来，是未来正在向猪猪靠近。'),
   settings:make('settings','PigOS 设置','工资参数、数据备份和一些后台杂物都收进这里。')
  };
  [els.top,els.hero,els.earned,els.monthRow,els.rateRow,els.second,els.goal,els.quote].forEach(x=>x&&pages.home.appendChild(x));
  if(els.wish)pages.wish.appendChild(els.wish);
  if(els.asset)pages.assets.appendChild(els.asset);
  if(els.calendar)pages.calendar.appendChild(els.calendar);
+ buildCountdownPage(pages.countdays);
  [els.salary,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));
  Object.values(pages).forEach(p=>wrap.appendChild(p));
 
  const nav=document.createElement('nav');nav.className='bottomNav';nav.setAttribute('aria-label','PigOS 功能导航');
- nav.innerHTML='<button class="navBtn" data-page-go="home"><span class="navIcon">🐷</span>回血</button><button class="navBtn" data-page-go="wish"><span class="navIcon">🛍️</span>愿望</button><button class="navBtn" data-page-go="assets"><span class="navIcon">💳</span>资产</button><button class="navBtn" data-page-go="calendar"><span class="navIcon">🗓️</span>日历</button><button class="navBtn" data-page-go="settings"><span class="navIcon">⚙️</span>设置</button>';
+ nav.innerHTML='<button class="navBtn" data-page-go="home"><span class="navIcon">🐷</span>回血</button><button class="navBtn" data-page-go="wish"><span class="navIcon">🛍️</span>愿望</button><button class="navBtn" data-page-go="assets"><span class="navIcon">💳</span>资产</button><button class="navBtn" data-page-go="calendar"><span class="navIcon">🗓️</span>日历</button><button class="navBtn" data-page-go="countdays"><span class="navIcon">⏳</span>倒数</button><button class="navBtn" data-page-go="settings"><span class="navIcon">⚙️</span>设置</button>';
  document.body.appendChild(nav);
  nav.querySelectorAll('.navBtn').forEach(b=>b.addEventListener('click',()=>setPage(b.dataset.pageGo)));
  const saved=localStorage.getItem('pigActivePage');
- setPage(['home','wish','assets','calendar','settings'].includes(saved)?saved:'home',false);
+ setPage(['home','wish','assets','calendar','countdays','settings'].includes(saved)?saved:'home',false);
 }
 function setPage(name,scroll=true){
  document.querySelectorAll('.appPage').forEach(p=>p.classList.toggle('active',p.dataset.page===name));
