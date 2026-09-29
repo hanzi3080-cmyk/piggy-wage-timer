@@ -238,9 +238,9 @@ function setupAppPages(){
  if(els.wish)pages.wish.appendChild(els.wish);
  if(els.asset)pages.assets.appendChild(els.asset);
  if(els.calendar)pages.calendar.appendChild(els.calendar);
- buildCountdownPage(pages.countdays);
  [els.salary,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));
  Object.values(pages).forEach(p=>wrap.appendChild(p));
+ buildCountdownPage(pages.countdays);
 
  const nav=document.createElement('nav');nav.className='bottomNav';nav.setAttribute('aria-label','PigOS 功能导航');
  nav.innerHTML='<button class="navBtn" data-page-go="home"><span class="navIcon">🐷</span>回血</button><button class="navBtn" data-page-go="wish"><span class="navIcon">🛍️</span>愿望</button><button class="navBtn" data-page-go="assets"><span class="navIcon">💳</span>资产</button><button class="navBtn" data-page-go="calendar"><span class="navIcon">🗓️</span>日历</button><button class="navBtn" data-page-go="countdays"><span class="navIcon">⏳</span>倒数</button><button class="navBtn" data-page-go="settings"><span class="navIcon">⚙️</span>设置</button>';
