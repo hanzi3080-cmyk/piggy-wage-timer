@@ -217,6 +217,7 @@ function setupAppPages(){
   asset:document.getElementById('assetCard'),
   calendar:document.getElementById('calendar').closest('.card'),
   salary:document.getElementById('baseSalary').closest('.card'),
+  worktime:document.getElementById('workStart').closest('.card'),
   vault:document.getElementById('exportData').closest('.card'),
   quote:document.getElementById('quote').closest('.card'),
   foot:document.querySelector('.foot')
@@ -238,7 +239,7 @@ function setupAppPages(){
  if(els.wish)pages.wish.appendChild(els.wish);
  if(els.asset)pages.assets.appendChild(els.asset);
  if(els.calendar)pages.calendar.appendChild(els.calendar);
- [els.salary,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));
+ [els.salary,els.worktime,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));
  Object.values(pages).forEach(p=>wrap.appendChild(p));
  buildCountdownPage(pages.countdays);
 
@@ -294,7 +295,7 @@ function tick(){
  document.getElementById('fill').style.width=p+'%';
  document.getElementById('status').textContent=msg; updateGoal(earned);
  if(s>=end) document.getElementById('countdown').textContent='00:00:00';
- else if(s<start) {const preRemain=workSeconds;document.getElementById('countdown').textContent=pad(preRemain/3600)+':'+pad((preRemain%3600)/60)+':'+pad(preRemain%60)};
+ else if(s<start) {const preRemain=workSeconds;document.getElementById('countdown').textContent=pad(preRemain/3600)+':'+pad((preRemain%3600)/60)+':'+pad(preRemain%60)}
  else {document.getElementById('countdown').textContent=pad(remain/3600)+':'+pad((remain%3600)/60)+':'+pad(remain%60)}
 }
 const goalName=document.getElementById('goalName'),goalPrice=document.getElementById('goalPrice'),goalResult=document.getElementById('goalResult');
@@ -316,10 +317,10 @@ wishSort.value=localStorage.getItem('pigWishSort')||'manual';
 function saveWishlist(){localStorage.setItem('pigWishlist',JSON.stringify(wishlist))}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function workNeededText(price){
- const hRate=daily/8;if(!hRate||price<=0)return '工资参数未设置';
+ const hRate=workSeconds>0?daily/(workSeconds/3600):0;if(!hRate||price<=0)return '工资参数未设置';
  let total=price/hRate;
  if(total<1){return '≈ 需要工作 '+Math.max(1,Math.ceil(total*60))+'分钟'}
- let d=Math.floor(total/8),h=Math.ceil(total-d*8);if(h>=8){d++;h=0}
+ const dayHours=workSeconds/3600;let d=Math.floor(total/dayHours),h=Math.ceil(total-d*dayHours);if(h>=dayHours){d++;h=0}
  if(d>0)return '≈ 需要工作 '+d+'天'+(h? h+'小时':'');
  return '≈ 需要工作 '+h+'小时';
 }
