@@ -1,0 +1,69 @@
+name: One-shot PigOS repair
+
+on:
+  push:
+    paths:
+      - '.github/workflows/one-shot-fix-pigos.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Repair PigOS work-time settings and navigation
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+
+          replacements = [
+            (
+              "  salary:document.getElementById('baseSalary').closest('.card'),\n  vault:document.getElementById('exportData').closest('.card'),",
+              "  salary:document.getElementById('baseSalary').closest('.card'),\n  worktime:document.getElementById('workStart').closest('.card'),\n  vault:document.getElementById('exportData').closest('.card'),"
+            ),
+            (
+              " [els.salary,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));",
+              " [els.salary,els.worktime,els.vault,els.foot].forEach(x=>x&&pages.settings.appendChild(x));"
+            ),
+            (
+              " else if(s<start) {const preRemain=workSeconds;document.getElementById('countdown').textContent=pad(preRemain/3600)+':'+pad((preRemain%3600)/60)+':'+pad(preRemain%60)};\n else {",
+              " else if(s<start) {const preRemain=workSeconds;document.getElementById('countdown').textContent=pad(preRemain/3600)+':'+pad((preRemain%3600)/60)+':'+pad(preRemain%60)}\n else {"
+            ),
+            (
+              " const hRate=daily/8;if(!hRate||price<=0)return '工资参数未设置';\n let total=price/hRate;",
+              " const hRate=workSeconds>0?daily/(workSeconds/3600):0;if(!hRate||price<=0)return '工资参数未设置';\n let total=price/hRate;"
+            ),
+            (
+              " let d=Math.floor(total/8),h=Math.ceil(total-d*8);if(h>=8){d++;h=0}",
+              " const dayHours=workSeconds/3600;let d=Math.floor(total/dayHours),h=Math.ceil(total-d*dayHours);if(h>=dayHours){d++;h=0}"
+            )
+          ]
+
+          for old, new in replacements:
+            if old not in s:
+              raise SystemExit('Expected pattern not found: ' + old[:100])
+            s = s.replace(old, new, 1)
+
+          p.write_text(s, encoding='utf-8')
+          PY
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path('index.html').read_text(encoding='utf-8')
+          scripts = re.findall(r'<script>(.*?)</script>', html, re.S)
+          Path('/tmp/pigos.js').write_text('\n'.join(scripts), encoding='utf-8')
+          PY
+          node --check /tmp/pigos.js
+
+      - name: Commit repaired PigOS
+        run: |
+          git config user.name "PigOS Repair Bot"
+          git config user.email "actions@github.com"
+          git add index.html
+          git commit -m "Fix PigOS navigation and configurable work hours"
+          git push
