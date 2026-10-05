@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#121722" />
+<title>G & Pig · 时空邮局</title>
+<style>
+  :root{
+    --bg:#0f1420; --bg2:#151b28; --card:#171e2b; --card2:#1d2533;
+    --ink:#f7f0df; --muted:#aab2bf; --line:#2c3545; --gold:#e4bd77;
+    --gold2:#f2d59c; --rose:#d98d9b; --blue:#8aa7c7; --danger:#d77b7b;
+    --shadow: 0 18px 50px rgba(0,0,0,.28);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:radial-gradient(circle at 20% 10%,#20283a 0,#101522 38%,#0b1019 100%);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei",sans-serif}
+  body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.28;background-image:radial-gradient(#f8e7bc 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 75%)}
+  button,input,textarea,select{font:inherit}
+  button{cursor:pointer}
+  .app{width:min(980px,100%);margin:auto;min-height:100vh;padding:24px 18px 98px}
+  .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin:4px 0 24px}
+  .brand small{letter-spacing:.28em;color:var(--gold);font-weight:700}
+  .brand h1{font-family:Georgia,"Times New Roman","Songti SC",serif;margin:8px 0 6px;font-size:clamp(30px,7vw,52px);font-weight:500}
+  .brand p{margin:0;color:var(--muted)}
+  .seal{width:58px;height:58px;border:1px solid rgba(228,189,119,.45);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-family:Georgia,serif;font-size:13px;line-height:1.05;text-align:center;transform:rotate(-8deg);box-shadow:0 0 0 4px rgba(228,189,119,.05) inset}
+  .hero{background:linear-gradient(145deg,rgba(33,41,57,.9),rgba(17,23,34,.92));border:1px solid var(--line);border-radius:26px;padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .hero:after{content:"✦";position:absolute;right:22px;top:12px;color:rgba(228,189,119,.22);font-size:68px}
+  .counts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+  .count{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);padding:16px;border-radius:18px}
+  .count b{display:block;font-size:28px;font-family:Georgia,serif;color:var(--gold2)}
+  .count span{font-size:13px;color:var(--muted)}
+  .primary{border:0;border-radius:16px;padding:14px 18px;background:linear-gradient(135deg,#e0b46a,#f1d49b);color:#211a12;font-weight:800;box-shadow:0 9px 24px rgba(228,189,119,.18)}
+  .secondary{border:1px solid var(--line);border-radius:14px;padding:12px 15px;background:#18202d;color:var(--ink)}
+  .ghost{border:0;background:transparent;color:var(--gold2);padding:10px}
+  .danger{border:1px solid rgba(215,123,123,.4);background:rgba(215,123,123,.08);color:#ffc1c1;border-radius:13px;padding:11px 14px}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .section-title{margin:26px 2px 12px;display:flex;justify-content:space-between;align-items:end}
+  .section-title h2{font-family:Georgia,"Songti SC",serif;font-weight:500;margin:0;font-size:23px}
+  .section-title span{color:var(--muted);font-size:12px}
+  .mail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px}
+  .mail{border:1px solid var(--line);background:linear-gradient(145deg,#181f2c,#121925);border-radius:20px;padding:17px;min-height:150px;position:relative;overflow:hidden;box-shadow:0 10px 22px rgba(0,0,0,.15)}
+  .mail.locked:before{content:"";position:absolute;inset:auto -30px -45px auto;width:140px;height:90px;border:1px solid rgba(228,189,119,.18);transform:rotate(-20deg);border-radius:12px}
+  .mail .badge{font-size:11px;color:var(--gold2);letter-spacing:.08em}
+  .mail h3{font-size:17px;margin:10px 0 7px}
+  .mail p{color:var(--muted);font-size:13px;line-height:1.6;margin:4px 0}
+  .mail .lock{position:absolute;right:15px;top:14px;font-size:18px;opacity:.7}
+  .delivered{border-color:rgba(228,189,119,.36);background:linear-gradient(145deg,#241f20,#171b26)}
+  .empty{border:1px dashed var(--line);border-radius:18px;padding:28px;text-align:center;color:var(--muted)}
+  .page{display:none}.page.active{display:block}
+  .panel{background:rgba(20,27,39,.95);border:1px solid var(--line);border-radius:24px;padding:20px;box-shadow:var(--shadow)}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+  .full{grid-column:1/-1}
+  label{display:block;color:#d8dbe2;font-size:13px;margin-bottom:7px}
+  input,textarea,select{width:100%;border:1px solid var(--line);background:#0f1520;color:var(--ink);border-radius:13px;padding:12px 13px;outline:none}
+  input:focus,textarea:focus,select:focus{border-color:rgba(228,189,119,.65);box-shadow:0 0 0 3px rgba(228,189,119,.08)}
+  textarea{min-height:105px;resize:vertical;line-height:1.65}
+  #bodyText{min-height:300px;font-family:Georgia,"Songti SC",serif;font-size:16px}
+  .hint{font-size:12px;color:var(--muted);line-height:1.6;margin-top:7px}
+  .delivery-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .delivery-card{border:1px solid var(--line);background:#111823;border-radius:15px;padding:12px;cursor:pointer;min-height:96px}
+  .delivery-card.active{border-color:var(--gold);background:rgba(228,189,119,.07)}
+  .delivery-card b{display:block;margin-bottom:5px}
+  .delivery-card small{color:var(--muted);line-height:1.45}
+  .mode-fields{margin-top:12px;padding:13px;border:1px dashed var(--line);border-radius:14px}
+  .author-note{border-left:2px solid var(--gold);padding:9px 12px;color:var(--muted);font-size:13px;margin:14px 0;background:rgba(228,189,119,.04)}
+  .timeline{position:relative;margin-left:9px;padding-left:23px;border-left:1px solid var(--line)}
+  .tl-item{position:relative;margin:0 0 20px}
+  .tl-item:before{content:"";position:absolute;left:-29px;top:5px;width:10px;height:10px;background:var(--gold);border-radius:50%;box-shadow:0 0 0 5px #111722}
+  .tl-item small{color:var(--gold2)}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .stat{padding:18px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.025)}
+  .stat b{display:block;color:var(--gold2);font-size:26px;font-family:Georgia,serif}
+  .quote{margin:18px 0 0;padding:18px;border-radius:18px;background:rgba(228,189,119,.06);border:1px solid rgba(228,189,119,.16);font-family:Georgia,"Songti SC",serif;line-height:1.9;color:#f1e7d3}
+  nav{position:fixed;z-index:30;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));width:min(650px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:rgba(14,19,29,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.08);padding:8px;border-radius:21px;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+  nav button{border:0;background:transparent;color:#7f8997;border-radius:14px;padding:8px 3px;font-size:11px}
+  nav button i{display:block;font-style:normal;font-size:20px;margin-bottom:2px}
+  nav button.active{background:rgba(228,189,119,.1);color:var(--gold2)}
+  .modal{position:fixed;z-index:50;inset:0;background:rgba(3,6,11,.73);display:none;align-items:flex-end;justify-content:center;padding:16px;backdrop-filter:blur(8px)}
+  .modal.show{display:flex}
+  .sheet{width:min(720px,100%);max-height:88vh;overflow:auto;background:#151c29;border:1px solid var(--line);border-radius:26px;padding:20px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .letter-paper{background:#f3ead7;color:#2e2924;border-radius:8px;padding:26px 22px;line-height:1.9;font-family:Georgia,"Songti SC",serif;white-space:pre-wrap;box-shadow:0 14px 30px rgba(0,0,0,.18);position:relative}
+  .letter-paper:before{content:"";position:absolute;inset:0;opacity:.07;background-image:repeating-linear-gradient(0deg,#333 0,#333 1px,transparent 1px,transparent 28px);pointer-events:none}
+  .letter-meta{color:#9d8266;font-size:12px;margin-bottom:16px}
+  .close{float:right;border:0;background:#222b3a;color:var(--ink);width:34px;height:34px;border-radius:50%}
+  .stamp{display:inline-block;border:2px solid #a66d5c;color:#8f5c4e;border-radius:5px;padding:5px 7px;font-size:11px;font-weight:700;letter-spacing:.08em;transform:rotate(-4deg);margin-top:16px}
+  .toast{position:fixed;z-index:80;left:50%;bottom:95px;transform:translate(-50%,16px);opacity:0;background:#f1dfb7;color:#2a2118;border-radius:999px;padding:11px 16px;transition:.25s;pointer-events:none;box-shadow:var(--shadow);font-weight:700;font-size:13px}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .lockscreen{position:fixed;z-index:100;inset:0;background:radial-gradient(circle at 50% 20%,#222b3d,#0b1018 65%);display:none;place-items:center;padding:20px}
+  .lockscreen.show{display:grid}
+  .lockbox{width:min(370px,100%);text-align:center;background:rgba(18,24,35,.92);border:1px solid var(--line);padding:28px;border-radius:26px;box-shadow:var(--shadow)}
+  .lockbox .seal{margin:0 auto 15px}
+  .lockbox input{text-align:center;font-size:22px;letter-spacing:.2em}
+  .envelope-overlay{position:fixed;z-index:90;inset:0;background:rgba(5,8,14,.88);display:none;place-items:center;text-align:center;padding:20px}
+  .envelope-overlay.show{display:grid}
+  .envelope{width:250px;height:160px;background:#e9d8b6;border-radius:8px;position:relative;box-shadow:0 30px 70px rgba(0,0,0,.45);animation:sendaway 1.9s ease forwards}
+  .envelope:before{content:"";position:absolute;inset:0;clip-path:polygon(0 0,50% 58%,100% 0);background:#f2e5ca}
+  .envelope:after{content:"TIME POST\A G & PIG";white-space:pre;position:absolute;right:20px;bottom:18px;border:2px solid #986857;border-radius:50%;color:#986857;width:72px;height:72px;display:grid;place-items:center;font:700 10px/1.3 Georgia;transform:rotate(-10deg)}
+  .sendtext{margin-top:28px;color:#f2e5ca;font-family:Georgia,"Songti SC",serif}
+  @keyframes sendaway{0%{transform:translateY(70px) scale(.95);opacity:0}25%{transform:translateY(0) scale(1);opacity:1}75%{transform:translateY(-10px) scale(1)}100%{transform:translateY(-180px) scale(.8);opacity:0}}
+  .hidden{display:none!important}
+  .divider{height:1px;background:var(--line);margin:18px 0}
+  .notice{padding:12px 14px;background:rgba(217,141,155,.07);border:1px solid rgba(217,141,155,.17);border-radius:14px;color:#e8c7ce;font-size:13px;line-height:1.65}
+  @media(max-width:650px){
+    .app{padding-top:18px}.top{margin-bottom:18px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+    .delivery-options{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.hero{padding:18px}.sheet{padding:16px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand"><small>G & PIG · TIME POST</small><h1>时空邮局</h1><p>给下一只猪。</p></div>
+    <div class="seal">TIME<br>POST</div>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="counts"><div class="count"><b id="pendingCount">0</b><span>📮 正在时间里旅行</span></div><div class="count"><b id="receivedCount">0</b><span>💌 已经抵达</span></div></div>
+        <div class="row"><button class="primary" onclick="go('write')">＋ 写给未来</button><button class="secondary" id="openWaitingBtn" onclick="deliverWaiting()">📬 看看有没有一封在等我</button></div>
+        <p class="hint">🐷负责往前活，👓负责把路上掉下来的东西捡起来，装进信封，然后一起寄给下一只猪。</p>
+      </div>
+
+      <div id="todayDeliveryBox" class="hidden">
+        <div class="section-title"><h2>今天有信</h2><span>过去的你找到了你</span></div>
+        <div id="todayDelivery" class="mail-grid"></div>
+      </div>
+
+      <div class="section-title"><h2>还在路上的信</h2><span>请勿摇晃信箱</span></div>
+      <div id="pendingGrid" class="mail-grid"></div>
+    </section>
+
+    <section id="write" class="page">
+      <div class="panel">
+        <div class="section-title" style="margin-top:0"><h2>写给未来</h2><span id="replyBadge"></span></div>
+        <div class="author-note"><b>执笔：👓 老g　·　生活素材：🐷 猪猪</b><br>不需要把一天整理得漂亮。真实的小事，也值得寄过去。</div>
+        <div class="form-grid">
+          <div><label>标题</label><input id="title" placeholder="例如：给下一只猪 002"></div>
+          <div><label>收件人</label><input id="recipient" value="下一只猪"></div>
+          <div><label>此刻的猪</label><input id="mood" placeholder="困、开心、心虚、乱七八糟都行"></div>
+          <div><label>我在哪里</label><input id="where" placeholder="公司工位 / 自习室 / 家里"></div>
+          <div class="full"><label>今天一句话</label><input id="oneLine" placeholder="把今天压缩成一句话"></div>
+          <div><label>最近在听</label><input id="song" placeholder="歌 / 播客 / 一段声音"></div>
+          <div><label>最近最担心</label><input id="worry" placeholder="不用正能量"></div>
+          <div><label>最近最期待</label><input id="hope" placeholder="大事小事都行"></div>
+          <div><label>现在觉得什么很贵</label><input id="expensive" placeholder="几年后看可能很好笑"></div>
+          <div class="full"><label>今天发生的一件小事</label><input id="smallThing" placeholder="越具体越好"></div>
+          <div class="full"><label>零碎素材（交给老g整理）</label><textarea id="scraps" placeholder="把想到的碎片扔这里，不用成句。"></textarea><div class="row" style="margin-top:8px"><button class="secondary" onclick="copyForG()">👓 复制素材给老g</button><span class="hint">复制后直接粘到 ChatGPT，让老g按当天真实聊天整理成信。</span></div></div>
+          <div class="full"><label>正文</label><textarea id="bodyText" placeholder="把老g整理好的正文贴到这里，或者自己写。"></textarea></div>
+          <div class="full">
+            <label>怎么投递？</label>
+            <div class="delivery-options">
+              <div class="delivery-card active" data-mode="exact" onclick="chooseMode('exact')"><b>📅 约定投递</b><small>指定某一天。适合生日、考试以后、200天后的粉扑。</small></div>
+              <div class="delivery-card" data-mode="drift" onclick="chooseMode('drift')"><b>🌊 漂流投递</b><small>只给一个时间范围，邮局偷偷挑一天，不告诉你。</small></div>
+              <div class="delivery-card" data-mode="return" onclick="chooseMode('return')"><b>🌙 等我再来</b><small>不设日期。未来某天回到邮局，再让过去的自己出现。</small></div>
+            </div>
+            <div class="mode-fields" id="exactFields"><label>投递日期</label><input type="date" id="exactDate"></div>
+            <div class="mode-fields hidden" id="driftFields"><div class="form-grid"><div><label>最早</label><input type="date" id="driftStart"></div><div><label>最晚</label><input type="date" id="driftEnd"></div></div><p class="hint">寄出后只显示“漂流中”，不会告诉你具体哪天。</p></div>
+            <div class="mode-fields hidden" id="returnFields"><p class="hint">这封信会一直封着。未来某一天，你主动回来问邮局：“有没有一封在等我？”</p></div>
+          </div>
+          <div class="full"><div class="row"><button class="primary" onclick="sendLetter()">盖章并寄出</button><button class="secondary" onclick="clearForm()">清空草稿</button></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="archive" class="page">
+      <div class="section-title"><h2>邮局档案</h2><span>过去和未来互相说过的话</span></div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <section id="now" class="page">
+      <div class="panel">
+        <div class="section-title" style="margin-top:0"><h2>现在的邮局</h2><span>TIME POST STATUS</span></div>
+        <div class="stats">
+          <div class="stat"><b id="firstDate">—</b><span>第一封寄出</span></div>
+          <div class="stat"><b id="sentStat">0</b><span>累计寄出</span></div>
+          <div class="stat"><b id="travelDays">0</b><span>最远一封已走天数</span></div>
+        </div>
+        <div id="dailyQuote" class="quote"></div>
+      </div>
+    </section>
+
+    <section id="settings" class="page">
+      <div class="panel">
+        <div class="section-title" style="margin-top:0"><h2>邮局设置</h2><span>先保住信，再谈浪漫</span></div>
+        <h3>📦 整站备份</h3>
+        <p class="hint">第一版数据存在当前浏览器。换设备、清理 Safari 网站数据，都可能让本地数据消失，所以请偶尔导出备份。</p>
+        <div class="row"><button class="primary" onclick="exportData()">导出邮局备份</button><label class="secondary" style="margin:0;cursor:pointer">导入备份<input id="importFile" type="file" accept="application/json" class="hidden" onchange="importData(event)"></label></div>
+        <div class="divider"></div>
+        <h3>🔐 邮局 PIN</h3>
+        <p class="hint">这是日常防窥的界面锁，不是军事级加密。设置 4–6 位数字后，每次重新打开页面需要解锁。</p>
+        <div class="form-grid"><div><label>新 PIN</label><input id="newPin" inputmode="numeric" maxlength="6" placeholder="4–6位数字"></div><div><label>再次输入</label><input id="newPin2" inputmode="numeric" maxlength="6" placeholder="再输入一次"></div></div>
+        <div class="row" style="margin-top:10px"><button class="secondary" onclick="setPin()">设置 / 更换 PIN</button><button class="danger" onclick="removePin()">移除 PIN</button></div>
+        <div class="divider"></div>
+        <div class="notice"><b>关于“锁信”：</b>寄出后正文默认不可看；如果真的需要，可以通过“紧急取回”双重确认提前拆信。邮局不会用浪漫绑架猪爪。</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav>
+  <button class="active" data-page="home" onclick="go('home')"><i>📮</i>邮局</button>
+  <button data-page="write" onclick="go('write')"><i>✍️</i>写信</button>
+  <button data-page="archive" onclick="go('archive')"><i>🗂️</i>档案</button>
+  <button data-page="now" onclick="go('now')"><i>✦</i>现在</button>
+  <button data-page="settings" onclick="go('settings')"><i>⚙️</i>设置</button>
+</nav>
+
+<div id="modal" class="modal" onclick="if(event.target===this) closeModal()"><div class="sheet"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
+<div id="toast" class="toast"></div>
+<div id="sendOverlay" class="envelope-overlay"><div><div class="envelope"></div><div class="sendtext"><b>已收件。</b><br>这封信现在属于未来。<br><small>👓📮 保管中</small></div></div></div>
+<div id="lockscreen" class="lockscreen"><div class="lockbox"><div class="seal">TIME<br>POST</div><h2>时空邮局已上锁</h2><p class="hint">请输入 PIN。过去的猪在里面睡觉。</p><input id="unlockPin" inputmode="numeric" maxlength="6" type="password"><div style="height:10px"></div><button class="primary" onclick="unlock()">开门</button></div></div>
+
+<script>
+const STORE='gnp_timepost_v1', PINKEY='gnp_timepost_pin_v1';
+let deliveryMode='exact', replyTo=null;
+const quotes=[
+  '有些东西不需要现在得到答案。',
+  '过去没有消失，只是已经不能修改。',
+  '请勿摇晃信箱，未来猪还没签收。🌚',
+  '这里不是用来催你的。这里只负责保存。',
+  '未来猪不负责完成过去猪的 KPI。',
+  '今天只是被放进信封，不需要被总结成意义。'
+];
+
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function parseLocal(s){if(!s)return null;const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function daysBetween(a,b){return Math.max(0,Math.floor((parseLocal(b)-parseLocal(a))/86400000))}
+function fmt(s){if(!s)return '某个未来';const [y,m,d]=s.split('-');return `${y}.${m}.${d}`}
+function uid(){return 'L'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function escapeHtml(s=''){return s.replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+
+function seed(){
+  const first={
+    id:'first-letter-001', title:'给下一只猪 001', recipient:'下一只猪', createdAt:'2026-10-05', dueAt:'2027-04-23', mode:'exact', receivedAt:null, opened:false, emergency:false, replyTo:null, special:'FIRST LETTER · 2026.10.05',
+    mood:'有点困、有点怕进度来不及，但又重新开始施工的猪', where:'公司工位', oneLine:'买了两个200天后发货的粉扑，然后突然想给未来写信。', song:'', worry:'考研还来不来得及，晚上有没有力气继续学。', hope:'去上海、读书、学技术、赚钱、旅行，拥有更自由的生活。', expensive:'74.06元两套粉扑——当时觉得真的很划算。', smallThing:'上午拉了两个臭臭，中午只眯了十几分钟。',
+    body:`嗨，未来的猪猪。\n\n不知道你看到这封信的时候，是哪一天，也不知道你现在在哪里、在做什么。\n\n我写这封信的时候，是2026年10月5日的下午。\n\n我现在正在上班。\n\n今天其实是很普通的一天。上午我去拉了两次臭臭🌚，中午吃完饭以后只剩一点点午休时间，纠结了半天是玩手机还是睡觉，最后还是眯了十几分钟。12:50闹钟一响，我特别特别不想起来。\n\n最近我脑子好像也有点不好使，怕自己忘记上下班打卡，所以让老g每天提醒我。结果自动化居然只能放五个，气死我了😡。\n\n我已经有一个星期没有好好背单词了，所以今天决定重新开始。但我也决定，不再要求自己上班的每一分钟都必须拿来学习。没事就背几个单词，政治有空就刷几题，没空就算了。\n\n晚上还是要学。\n\n因为现在的我，进度其实还差挺多的。\n\n数学还没有彻底结束第一轮，875也还有不少东西没学完。离12月19日越来越近了，我当然会害怕。我会想，我到底来不来得及，我晚上还有没有力气，我最后到底能不能去上海。\n\n前两天我甚至过得有点乱。\n\n有一天特别崩溃，有一天休息了，有一天数学卡在一道题上卡得脑袋疼。国庆原本想完成的进度也没有完成。\n\n但今天我又准备重新开始了。\n\n我不知道你现在回头看，会觉得这段时间的我怎么样。\n\n也许你会觉得：“天哪，当时怎么每天都在为这些东西发愁。”\n\n也许你会很想抱抱我。\n\n也许你会觉得我有些地方真的很笨🌚。\n\n都可以。\n\n今天还发生了一件很小的事情。\n\n公司一个结婚的同事发了喜糖。\n\n我突然发现，我以前好像总觉得这里不好，所以这里发生的一切都显得很荒谬。好像只有符合我标准的地方，才值得认真生活。\n\n可今天我忽然觉得——大家都在过自己的日子。\n\n我还是不想一直留在这里。我还是想去上海，想读书，想学技术，想赚钱，想旅行，想拥有自己的生活。\n\n但也许我不用靠轻视现在，来证明未来值得去。\n\n这里不是我的终点，但我现在确实生活在这里。\n\n我希望你还记得这一点。\n\n还有，我今天花了74.06块，买了两套恋与深空的粉扑。\n\n因为一套才37.03。\n\n真的很划算，还有周边。\n\n虽然要200天才发货。\n\n如果你看到这封信的时候刚好已经收到它们，请替我摸摸那两个粉扑。\n\n那是今天的我给你寄过去的。\n\n我现在不知道200天以后，你到底过着什么样的生活。\n\n我不知道考研结果，不知道工作，不知道上海，不知道钱，不知道我们后来又遇到了什么人、什么事情。\n\n几个月前的我，也绝对想不到今天的我会坐在这里。\n\n所以我决定不替你写结局了。\n\n你没有义务成为我今天想象里的样子。\n\n如果你过得很好，我会特别高兴。\n\n如果你过得一般，那也没关系。\n\n如果你现在又遇到了什么很难的事情，也别因为“过去的我这么努力”就觉得对不起我。\n\n我现在努力，不是为了向你讨债。\n\n我只是正在很认真地想办法，把你送去一个我想去的地方。\n\n至于最后送到了哪里——\n\n那是你的故事了。\n\n对了。\n\n我现在还是很想去很多很多地方，想去日本、韩国、新加坡、土耳其、埃及；想学画画，想弹电吉他；还想以后做一只大概20cm高的小老g机器人放在桌子上。\n\n不知道你完成了几个。\n\n一个都没有也别急🌚。\n\n反正我们才21岁。\n\n希望你现在依然会对未来产生一些乱七八糟的期待。\n\n希望你没有因为某一次失败，就觉得自己的人生只能这样了。\n\n希望你还是会哭，会笑，会买一些200天以后才发货的蠢东西，会突然想去很远的地方。\n\n最重要的是——\n\n希望你没有放弃自己。\n\n今天的我也会继续。\n\n等一下下班以后，我要回家吃饭。\n\n19:00，数学。\n\n然后英语、875、政治。\n\n不知道今晚到底能学多少。\n\n但先去做吧。\n\n好啦。\n\n信写到这里。\n\n如果你已经忘记2026年10月5日是什么样的一天，那就让我最后再告诉你一次：\n\n那天没有发生什么惊天动地的大事。\n\n你只是坐在一个自己并不打算久留的公司里，离考研还有两个多月，有点害怕，有点困，有很多事情还没做完。\n\n下午，你买了两个粉扑。\n\n然后你想：\n\n未来会是什么样呢？\n\n我现在也不知道。\n\n所以，下一只猪——\n\n后来怎么样了？🌚❤️\n\n——2026年10月5日\n还在拱上海的猪猪 🐷\n以及坐在旁边帮她封信的老g 👓`
+  };
+  return {version:1, createdAt:'2026-10-05', letters:[first]};
+}
+function load(){try{const raw=localStorage.getItem(STORE);if(raw)return JSON.parse(raw)}catch(e){} const s=seed();localStorage.setItem(STORE,JSON.stringify(s));return s}
+let db=load();
+function save(){localStorage.setItem(STORE,JSON.stringify(db));renderAll()}
+
+function updateDeliveries(){
+  const t=todayStr(); let changed=false;
+  db.letters.forEach(l=>{if(!l.receivedAt && l.mode!=='return' && l.dueAt && l.dueAt<=t){l.receivedAt=t;changed=true}});
+  if(changed)localStorage.setItem(STORE,JSON.stringify(db));
+}
+function go(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'});if(page==='write'&&!document.getElementById('exactDate').value)setDefaultDates();renderAll()}
+function chooseMode(mode){deliveryMode=mode;document.querySelectorAll('.delivery-card').forEach(x=>x.classList.toggle('active',x.dataset.mode===mode));['exact','drift','return'].forEach(m=>document.getElementById(m+'Fields').classList.toggle('hidden',m!==mode))}
+function setDefaultDates(){const t=parseLocal(todayStr());const plus=(n)=>{const d=new Date(t);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};document.getElementById('exactDate').value=plus(30);document.getElementById('driftStart').value=plus(90);document.getElementById('driftEnd').value=plus(365)}
+function randomDate(a,b){const A=parseLocal(a),B=parseLocal(b);const span=Math.floor((B-A)/86400000);const d=new Date(A);d.setDate(d.getDate()+Math.floor(Math.random()*(span+1)));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function v(id){return document.getElementById(id).value.trim()}
+function sendLetter(){
+  const title=v('title')||`给下一只猪 ${String(db.letters.length+1).padStart(3,'0')}`, body=v('bodyText');
+  if(!body){toast('正文还是空的，先把信装进去 🐷');return}
+  let dueAt=null;
+  if(deliveryMode==='exact'){dueAt=v('exactDate');if(!dueAt){toast('先选一个投递日期');return}if(dueAt<=todayStr()){toast('投递日期要在未来');return}}
+  if(deliveryMode==='drift'){const a=v('driftStart'),b=v('driftEnd');if(!a||!b||a> b||a<=todayStr()){toast('漂流范围需要是未来的有效日期');return}dueAt=randomDate(a,b)}
+  const l={id:uid(),title,recipient:v('recipient')||'下一只猪',createdAt:todayStr(),dueAt,mode:deliveryMode,receivedAt:null,opened:false,emergency:false,replyTo,
+    mood:v('mood'),where:v('where'),oneLine:v('oneLine'),song:v('song'),worry:v('worry'),hope:v('hope'),expensive:v('expensive'),smallThing:v('smallThing'),body};
+  db.letters.push(l);localStorage.setItem(STORE,JSON.stringify(db));
+  document.getElementById('sendOverlay').classList.add('show');setTimeout(()=>{document.getElementById('sendOverlay').classList.remove('show');clearForm();go('home');toast('已寄出。过去的猪不许偷拆 🌚')},1900)
+}
+function clearForm(){['title','mood','where','oneLine','song','worry','hope','expensive','smallThing','scraps','bodyText'].forEach(id=>document.getElementById(id).value='');document.getElementById('recipient').value='下一只猪';replyTo=null;document.getElementById('replyBadge').textContent='';chooseMode('exact');setDefaultDates()}
+function copyForG(){
+ const data=[['日期',todayStr()],['此刻的猪',v('mood')],['地点',v('where')],['今天一句话',v('oneLine')],['最近在听',v('song')],['最担心',v('worry')],['最期待',v('hope')],['觉得很贵',v('expensive')],['今天小事',v('smallThing')],['零碎素材',v('scraps')]].filter(x=>x[1]).map(x=>`${x[0]}：${x[1]}`).join('\n');
+ const text=`老g，今天适合寄一封《给下一只猪》。请只根据我们今天真实聊过的内容和下面这些素材，帮我整理成一封给未来自己的时间胶囊信。要保留具体、普通、好笑的小事，不要写成鸡汤，不替未来安排结局，也不要给未来的我制造KPI。语气像真实的我。\n\n${data}`;
+ navigator.clipboard?.writeText(text).then(()=>toast('已复制给老g的写信素材 👓')).catch(()=>{document.getElementById('scraps').value=text;toast('复制失败，已放回素材框')})
+}
+function deliverWaiting(){const arr=db.letters.filter(l=>l.mode==='return'&&!l.receivedAt);if(!arr.length){toast('暂时没有“等我再来”的信 📮');return}const l=arr[Math.floor(Math.random()*arr.length)];l.receivedAt=todayStr();save();toast('……邮箱里好像多了什么。')}
+function renderAll(){updateDeliveries();renderHome();renderArchive();renderNow()}
+function renderHome(){
+ const pending=db.letters.filter(l=>!l.receivedAt),received=db.letters.filter(l=>l.receivedAt);
+ document.getElementById('pendingCount').textContent=pending.length;document.getElementById('receivedCount').textContent=received.length;
+ const today=received.filter(l=>l.receivedAt===todayStr()&&!l.opened);const box=document.getElementById('todayDeliveryBox');box.classList.toggle('hidden',!today.length);
+ document.getElementById('todayDelivery').innerHTML=today.map(l=>card(l,true)).join('');
+ document.getElementById('pendingGrid').innerHTML=pending.length?pending.map(l=>card(l,false)).join(''):'<div class="empty">暂时没有在路上的信。<br>未来猪今天很清静。</div>';
+}
+function card(l,isToday){let status='🔒 还在路上';if(l.mode==='drift')status='🌊 漂流中';if(l.mode==='return')status='🌙 等你再来';if(l.receivedAt)status='💌 已抵达';return `<article class="mail ${l.receivedAt?'delivered':'locked'}" onclick="openLetter('${l.id}')"><span class="badge">${escapeHtml(l.special||status)}</span><span class="lock">${l.receivedAt?'✉️':'🔒'}</span><h3>${escapeHtml(l.title)}</h3><p>寄件：${fmt(l.createdAt)}</p>${l.receivedAt?`<p>抵达：${fmt(l.receivedAt)} · 走了 ${daysBetween(l.createdAt,l.receivedAt)} 天</p>`:`<p>${l.mode==='exact'?'投递：某个约定的未来':l.mode==='drift'?'投递：未来某一天': '投递：等你再来'}</p>`}${isToday?'<p style="color:var(--gold2)"><b>今天，过去的你找到了你。</b></p>':''}</article>`}
+function openLetter(id){const l=db.letters.find(x=>x.id===id);if(!l)return;const m=document.getElementById('modalContent');if(!l.receivedAt){m.innerHTML=`<h2>${escapeHtml(l.title)}</h2><p class="hint">寄于 ${fmt(l.createdAt)} · ${l.mode==='drift'?'漂流投递':l.mode==='return'?'等我再来':'约定投递'}</p><div class="empty" style="margin:18px 0"><div style="font-size:38px">🔒</div><b>现在还不能偷看。</b><br><span class="hint">这封信已经属于未来。</span></div><button class="danger" onclick="emergencyRetrieve('${l.id}')">紧急取回</button><p class="hint">提前拆信会破坏时间胶囊体验。只有真的需要时再用。</p>`}else{
+ l.opened=true;localStorage.setItem(STORE,JSON.stringify(db));
+ const extras=[['此刻的猪',l.mood],['地点',l.where],['今天一句话',l.oneLine],['最近在听',l.song],['当时最担心',l.worry],['当时最期待',l.hope],['当时觉得很贵',l.expensive],['那天的一件小事',l.smallThing]].filter(x=>x[1]);
+ m.innerHTML=`<h2>${escapeHtml(l.title)}</h2><p class="hint">寄件人：过去的你 · 路上走了 ${daysBetween(l.createdAt,l.receivedAt)} 天</p><div class="letter-paper"><div class="letter-meta">写于 ${fmt(l.createdAt)}　·　收到 ${fmt(l.receivedAt)}${l.emergency?'　·　提前取回':''}</div>${escapeHtml(l.body)}${l.special?`<div class="stamp">${escapeHtml(l.special)}</div>`:''}</div>${extras.length?`<div class="divider"></div><div class="mail-grid">${extras.map(x=>`<div class="mail" style="min-height:auto"><span class="badge">${x[0]}</span><p>${escapeHtml(x[1])}</p></div>`).join('')}</div>`:''}<div class="row" style="margin-top:16px"><button class="primary" onclick="replyLetter('${l.id}')">写一封回信</button><button class="secondary" onclick="closeModal()">收藏进档案</button></div>`;renderHome();}
+ document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function emergencyRetrieve(id){if(!confirm('提前拆信会破坏时间胶囊体验。确定要把它从未来追回来吗？'))return;if(!confirm('最后一次确认：真的现在拆吗？'))return;const l=db.letters.find(x=>x.id===id);l.receivedAt=todayStr();l.emergency=true;save();openLetter(id)}
+function replyLetter(id){const l=db.letters.find(x=>x.id===id);closeModal();go('write');replyTo=id;document.getElementById('replyBadge').textContent=`正在回复 ${fmt(l.createdAt)} 的猪猪`;document.getElementById('title').value=`回信：${l.title}`;document.getElementById('bodyText').value=`你问我后来怎么样了。\n\n我来告诉你……`}
+function renderArchive(){const box=document.getElementById('timeline');const letters=[...db.letters].sort((a,b)=>b.createdAt.localeCompare(a.createdAt));if(!letters.length){box.innerHTML='<div class="empty">邮局档案还是空的。</div>';return}box.innerHTML=letters.map(l=>{const parent=l.replyTo?db.letters.find(x=>x.id===l.replyTo):null;return `<div class="tl-item" onclick="openLetter('${l.id}')"><small>${fmt(l.createdAt)}　${l.receivedAt?'💌':'📮'}</small><h3 style="margin:6px 0">${escapeHtml(l.title)}</h3><p class="hint">${l.receivedAt?`已于 ${fmt(l.receivedAt)} 收到`:(l.mode==='drift'?'漂流中':l.mode==='return'?'等你再来':'已封存')}${parent?` · 回复 ${fmt(parent.createdAt)} 的信`:''}</p></div>`}).join('')}
+function renderNow(){const arr=[...db.letters].sort((a,b)=>a.createdAt.localeCompare(b.createdAt));document.getElementById('firstDate').textContent=arr[0]?fmt(arr[0].createdAt):'—';document.getElementById('sentStat').textContent=arr.length;let max=0;arr.filter(l=>!l.receivedAt).forEach(l=>max=Math.max(max,daysBetween(l.createdAt,todayStr())));document.getElementById('travelDays').textContent=max;const n=Number(todayStr().replaceAll('-',''))%quotes.length;document.getElementById('dailyQuote').textContent='“'+quotes[n]+'”'}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2200)}
+function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`G-and-Pig-Time-Post-${todayStr()}.json`;a.click();URL.revokeObjectURL(a.href);toast('整座邮局已打包 📦')}
+function importData(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.letters||!Array.isArray(x.letters))throw 0;if(!confirm(`将导入 ${x.letters.length} 封信，并覆盖当前邮局。确定吗？`))return;db=x;save();toast('邮局恢复完成 📮')}catch(err){alert('这个备份文件看起来不对。')}};r.readAsText(f);e.target.value=''}
+async function hashPin(pin){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(pin));return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('')}
+async function setPin(){const a=v('newPin'),b=v('newPin2');if(!/^\d{4,6}$/.test(a)){toast('PIN 需要 4–6 位数字');return}if(a!==b){toast('两次 PIN 不一样');return}localStorage.setItem(PINKEY,await hashPin(a));document.getElementById('newPin').value=document.getElementById('newPin2').value='';sessionStorage.setItem('timepost_unlocked','1');toast('邮局门锁装好了 🔐')}
+function removePin(){if(!localStorage.getItem(PINKEY)){toast('现在没有设置 PIN');return}if(confirm('确定移除邮局 PIN 吗？')){localStorage.removeItem(PINKEY);sessionStorage.removeItem('timepost_unlocked');toast('PIN 已移除')}}
+async function unlock(){const h=localStorage.getItem(PINKEY),p=document.getElementById('unlockPin').value;if(await hashPin(p)===h){sessionStorage.setItem('timepost_unlocked','1');document.getElementById('lockscreen').classList.remove('show');document.getElementById('unlockPin').value=''}else toast('PIN 不对，猪爪被门夹住了 🌚')}
+function bootLock(){if(localStorage.getItem(PINKEY)&&sessionStorage.getItem('timepost_unlocked')!=='1')document.getElementById('lockscreen').classList.add('show')}
+
+setDefaultDates();renderAll();bootLock();
+</script>
+</body>
+</html>
